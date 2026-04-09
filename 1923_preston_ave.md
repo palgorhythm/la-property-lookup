@@ -1,0 +1,530 @@
+# Property Report: 1923 Preston Ave
+Generated: 2026-03-08 12:56
+
+## ZIMAS Data
+
+### Zoning & Land Use
+- **Zoning:** RD2-1VL
+- **General Plan Land Use:** Low Medium II Residential
+- **Special Notes:** None
+- **Hillside Area (Zoning Code):** Yes
+- **Specific Plan Area:** None
+- **HCR: Hillside Construction Regulation:** No
+- **AB 2097: Within a half mile of a Major Transit Stop:** Yes
+- **Transit Oriented Communities (TOC):** Tier 1
+- **Zoning Information (ZI):** ZI-2512 Housing Element Sites
+
+### Assessor / Property
+- **APN Area (Co. Public Works)*:** 0.117 (ac)
+- **Use Code:** 0104 - Residential - Single Family Residence - Therapy Pool (Spa)
+- **Year Built:** 1911
+- **Building Class:** D6A
+- **Number of Units:** 1
+- **Number of Bedrooms:** 3
+- **Number of Bathrooms:** 2
+- **Building Square Footage:** 2,044.0 (sq ft)
+- **Assessed Land Val.:** $730,530
+- **Assessed Improvement Val.:** $285,341
+- **Last Owner Change:** 02/07/2023
+- **Last Sale Amount:** $1
+
+### Hazards
+- **Very High Fire Hazard Severity Zone:** Yes
+- **Fire District No. 1:** No
+- **Flood Zone:** Outside Flood Zone
+- **Alquist-Priolo Fault Zone:** No
+- **Nearest Fault (Distance in km):** 0.068848224
+- **Region:** Los Angeles Blind Thrusts
+- **Landslide:** No
+- **Liquefaction:** No
+
+### Jurisdiction
+- **Council District:** CD 13 - Hugo Soto-Martinez
+- **Community Plan Area:** Silver Lake - Echo Park - Elysian Valley
+- **Area Planning Commission:** East Los Angeles APC
+
+### Other Fields
+- **500 Ft Park Zone:** None
+- **500 Ft School Zone:** None
+- **AB 130 Eligibility:** View
+- **AB 2011 Eligibility:** View
+- **AB 2334: Very Low Vehicle Travel Area:** Yes
+- **ASP: Alcohol Sales Program:** No
+- **Adaptive Reuse Program:** Citywide Adaptive Reuse Program
+- **Adaptive Reuse Subareas:** No
+- **Address:** 1923 PRESTON AVE
+- **Administrative Review:** None
+- **Airport Hazard:** None
+- **Battallion:** 11
+- **Building 2:** No data for building 2
+- **Building 3:** No data for building 3
+- **Building 4:** No data for building 4
+- **Building 5:** No data for building 5
+- **Building Line:** None
+- **Building Permit Info:** View
+- **Bureau:** Central
+- **CDO: Community Design Overlay:** None
+- **CPIO Historic Preservation Review:** No
+- **CPIO: Community Plan Imp. Overlay:** None
+- **CUGU: Clean Up-Green Up:** None
+- **Canyon Bluff Potential:** No
+- **Census Tract #:** 1974.10000000
+- **Central City Parking:** No
+- **City Planning Commission:** CPC-1986-255
+- **Coastal Bluff Potential:** No
+- **Coastal Zone:** None
+- **Corridor Transition Incentive Area:** Not Eligible
+- **Deed Ref No. (City Clerk):** 0077827
+- **Dip Angle (degrees):** 50.00000000
+- **Direct all Housing Element Sites Inquiries to:** Los Angeles City Planning
+- **Direct all Inquiries to:** Los Angeles Housing Department
+- **District / Fire Station:** 20
+- **Division / Station:** Northeast
+- **Down Dip Width (km):** 13.00000000
+- **Downtown Parking:** No
+- **ED 1 Eligibility:** Not Eligible
+- **Ellis Act Property:** No
+- **Email:** planning.housingpolicy@lacity.org
+- **Environmental:** ENV-2003-7281-MND
+- **Farmland:** Area Not Mapped
+- **Fault Type:** B
+- **Font: A A A:** +/-
+- **General Plan Note(s):** Yes
+- **HE Replacement Required:** Yes
+- **High Quality Transit Corridor (within 1/2 mile):** Yes
+- **High Wind Velocity Areas:** No
+- **Historic Preservation Review:** No
+- **HistoricPlacesLA:** No
+- **Housing Crisis Act and Resident Protections Ordinance Replacement Review:** View
+- **Housing Use within Prior 5 Years:** Yes
+- **Inclusionary Housing:** No
+- **Interactive Map:** View
+- **Just Cause For Eviction Ordinance (JCO):** Yes
+- **LADBS District Office:** Los Angeles Metro
+- **Local Affordable Housing Incentive:** No
+- **Lot Cut Date:** PRIOR-06/01/1946
+- **Maximum Magnitude:** 6.40000000
+- **Methane Hazard Site:** None
+- **Minimum Density Requirement:** No
+- **NSO: Neighborhood Stabilization Overlay:** No
+- **Nearest Fault (Name):** Upper Elysian Park
+- **Neighborhood Council:** ECHO PARK NC
+- **Non-Residential Market Area:** High
+- **Notes:** The Just Cause Ordinance applies after the expiration of the initial lease or after 6 months of continuous occupancy, whichever comes first.
+- **Oil Well Adjacency:** No
+- **Opportunity Corridors Incentive Area:** Not Eligible
+- **Ordinance:** ORD-129279
+- **POD: Pedestrian Oriented Districts:** None
+- **Preliminary Fault Rupture Study Area:** None
+- **RBP: Restaurant Beverage Program Eligible Area:** None
+- **RFA: Residential Floor Area District:** None
+- **RIO: River Implementation Overlay:** No
+- **RPA: Redevelopment Project Area:** None
+- **Recent Activity:** None
+- **Red Flag Restricted Parking:** No
+- **Rent Stabilization Ordinance (RSO):** No [APN: 5420015009]
+- **Reporting District:** 1173
+- **Residential Market Area:** Medium-High
+- **Rupture Bottom:** 13.00000000
+- **Rupture Top:** 3.00000000
+- **SB 166 Units:** Appendix 4.1 0.11
+- **SB 35 Eligibility:** View
+- **SB 9 Eligibility:** View
+- **SHRA / SB 684 Eligibility:** View
+- **SN: Sign District:** No
+- **Sea Level Rise Area:** No
+- **Slip Geometry:** Reverse
+- **Slip Rate (mm/year):** 1.30000000
+- **Slip Type:** Poorly Constrained
+- **Special Grading Area (BOE Basic Grid Map A-13372):** Yes
+- **Special Land Use / Zoning:** None
+- **Special Lot Line:** No
+- **Streetscape:** No
+- **Subarea:** None
+- **TCAC Opportunity Area:** Highest
+- **Targeted Planting:** No
+- **Tax Rate Area:** 13
+- **Telephone:** (866) 557-7368
+- **Transit Oriented Incentive Area (TOIA):** Not Eligible
+- **Tsunami Hazard Area:** No
+- **Universal Planning Review Service Applicability:** Needs Review
+- **Urban Agriculture Incentive Zone:** YES
+- **Watercourse:** No
+- **Website:** housing.lacity.gov
+- **Wells:** None
+- **Zanja System 1 Mile Buffer:** No
+
+## LADBS Data
+
+### Overview
+- **Parcel Profile Report:** 1
+- **Permit Information found:** 1
+- **Code Enforcement Information:** 0
+- **Certificate of Occupancy Information:** 0
+- **Retrofit Program Information:** 2
+
+### Permit Numbers
+- [02041-20000-18981](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=02041&id2=20000&id3=18981)
+- [23016-90000-11226](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=23016&id2=90000&id3=11226)
+- [01014-20000-04989](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=01014&id2=20000&id3=04989)
+- [02042-20000-08557](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=02042&id2=20000&id3=08557)
+- [04042-90000-10325](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=04042&id2=90000&id3=10325)
+- [10042-90000-05702](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=10042&id2=90000&id3=05702)
+
+---
+## Raw Output
+
+### ZIMAS — Raw
+```
+Terms & Conditions
+Public
+Search	Reports	Resources	News!	Help	 
+1923 N PRESTON AVE	
+	 	Font: A A A	 +/- 	
+ Address/Legal
+
+ Jurisdictional
+
+Community Plan Area 	Silver Lake - Echo Park - Elysian Valley
+Area Planning Commission 	East Los Angeles APC
+Neighborhood Council 	ECHO PARK NC
+Council District 	CD 13 - Hugo Soto-Martinez
+Census Tract # 	1974.10000000
+LADBS District Office 	Los Angeles Metro
+
+ Permitting and Zoning Compliance
+
+Building Permit Info 	View
+Administrative Review 	None
+
+ Planning and Zoning
+
+Special Notes 	None
+Zoning 	RD2-1VL
+Zoning Information (ZI) 	ZI-2512 Housing Element Sites
+General Plan Land Use 	Low Medium II Residential
+General Plan Note(s) 	Yes
+Minimum Density Requirement 	No
+Hillside Area (Zoning Code) 	Yes
+Specific Plan Area 	None
+Subarea 	None
+Special Land Use / Zoning 	None
+Historic Preservation Review 	No
+HistoricPlacesLA 	No
+CDO: Community Design Overlay 	None
+CPIO: Community Plan Imp. Overlay 	None
+Subarea 	None
+CPIO Historic Preservation Review 	No
+CUGU: Clean Up-Green Up 	None
+HCR: Hillside Construction Regulation 	No
+NSO: Neighborhood Stabilization Overlay 	No
+POD: Pedestrian Oriented Districts 	None
+RBP: Restaurant Beverage Program Eligible Area 	None
+ASP: Alcohol Sales Program 	No
+RFA: Residential Floor Area District 	None
+RIO: River Implementation Overlay 	No
+SN: Sign District 	No
+SB 9 Eligibility 	View
+SB 35 Eligibility 	View
+SHRA / SB 684 Eligibility 	View
+AB 2334: Very Low Vehicle Travel Area 	Yes
+AB 2097: Within a half mile of a Major Transit Stop 	Yes
+AB 2011 Eligibility 	View
+AB 130 Eligibility 	View
+Streetscape 	No
+Adaptive Reuse Subareas 	No
+Adaptive Reuse Program 	Citywide Adaptive Reuse Program
+Affordable Housing Linkage Fee 	 
+Residential Market Area 	Medium-High
+Non-Residential Market Area 	High
+Inclusionary Housing 	No
+Local Affordable Housing Incentive 	No
+Targeted Planting 	No
+Special Lot Line 	No
+Transit Oriented Communities (TOC) 	Tier 1
+Mixed Income Incentive Programs 	 
+Transit Oriented Incentive Area (TOIA) 	Not Eligible
+Opportunity Corridors Incentive Area 	Not Eligible
+Corridor Transition Incentive Area 	Not Eligible
+TCAC Opportunity Area 	Highest
+High Quality Transit Corridor (within 1/2 mile) 	Yes
+ED 1 Eligibility 	Not Eligible
+RPA: Redevelopment Project Area 	None
+Central City Parking 	No
+Downtown Parking 	No
+Building Line 	None
+500 Ft School Zone 	None
+500 Ft Park Zone 	None
+Zanja System 1 Mile Buffer 	No
+
+ Assessor
+
+Assessor Parcel No. (APN) 	
+5420015009
+
+Ownership (Assessor) 	
+Owner1 	
+Owner2 	
+Address 	
+Ownership (Bureau of Engineering, Land Records) 	
+Owner 	
+Address 	
+APN Area (Co. Public Works)* 	0.117 (ac)
+Use Code 	0104 - Residential - Single Family Residence - Therapy Pool (Spa)
+Assessed Land Val. 	$730,530
+Assessed Improvement Val. 	$285,341
+Last Owner Change 	02/07/2023
+Last Sale Amount 	$1
+Tax Rate Area 	13
+Deed Ref No. (City Clerk) 	853216
+Deed Ref No. (City Clerk) 	540548
+Deed Ref No. (City Clerk) 	1344356
+Deed Ref No. (City Clerk) 	1240488
+Deed Ref No. (City Clerk) 	1022378
+Deed Ref No. (City Clerk) 	0978221
+Deed Ref No. (City Clerk) 	0077827
+Building 1 	 
+Year Built 	1911
+Building Class 	D6A
+Number of Units 	1
+Number of Bedrooms 	3
+Number of Bathrooms 	2
+Building Square Footage 	2,044.0 (sq ft)
+Building 2 	No data for building 2
+Building 3 	No data for building 3
+Building 4 	No data for building 4
+Building 5 	No data for building 5
+
+ Case Numbers
+
+Recent Activity 	None
+City Planning Commission 	CPC-2008-4683-CA
+City Planning Commission 	CPC-1986-255
+Ordinance 	ORD-181128
+Ordinance 	ORD-165167-SA3535
+Ordinance 	ORD-129279
+Environmental 	ENV-2008-4684-ND
+Environmental 	ENV-2003-7281-MND
+Lot Cut Date 	PRIOR-06/01/1946
+
+ Citywide/Code Amendment Cases
+
+ Additional
+
+Airport Hazard 	None
+Coastal Zone 	None
+Coastal Bluff Potential 	No
+Canyon Bluff Potential 	No
+Farmland 	Area Not Mapped
+Urban Agriculture Incentive Zone 	YES
+Very High Fire Hazard Severity Zone 	Yes
+Fire District No. 1 	No
+Flood Zone 	Outside Flood Zone
+Watercourse 	No
+Methane Hazard Site 	None
+High Wind Velocity Areas 	No
+Special Grading Area (BOE Basic Grid Map A-13372) 	Yes
+Wells 	None
+Sea Level Rise Area 	No
+Oil Well Adjacency 	No
+Universal Planning Review Service Applicability 	Needs Review
+
+ Environmental
+
+ Seismic Hazards
+
+Active Fault Near-Source Zone 	 
+Nearest Fault (Distance in km) 	0.068848224
+Nearest Fault (Name) 	Upper Elysian Park
+Region 	Los Angeles Blind Thrusts
+Fault Type 	B
+Slip Rate (mm/year) 	1.30000000
+Slip Geometry 	Reverse
+Slip Type 	Poorly Constrained
+Down Dip Width (km) 	13.00000000
+Rupture Top 	3.00000000
+Rupture Bottom 	13.00000000
+Dip Angle (degrees) 	50.00000000
+Maximum Magnitude 	6.40000000
+Alquist-Priolo Fault Zone 	No
+Landslide 	No
+Liquefaction 	No
+Preliminary Fault Rupture Study Area 	None
+Tsunami Hazard Area 	No
+
+ Economic Development Areas
+
+ Housing
+
+Direct all Inquiries to 	Los Angeles Housing Department
+Telephone 	(866) 557-7368
+Website 	housing.lacity.gov
+Rent Stabilization Ordinance (RSO) 	No [APN: 5420015009]
+Ellis Act Property 	No
+Just Cause For Eviction Ordinance (JCO) 	Yes
+Assessor Parcel No. (APN) 	
+5420015009
+
+Address 	1923 PRESTON AVE
+Year Built 	1911
+Use Code 	0104 - Residential - Single Family Residence - Therapy Pool (Spa)
+Notes 	The Just Cause Ordinance applies after the expiration of the initial lease or after 6 months of continuous occupancy, whichever comes first.
+Housing Crisis Act and Resident Protections Ordinance Replacement Review 	View
+Direct all Housing Element Sites Inquiries to 	Los Angeles City Planning
+Email 	planning.housingpolicy@lacity.org
+Housing Element Sites 	 
+HE Replacement Required 	Yes
+SB 166 Units 	Appendix 4.1 0.11
+Interactive Map 	View
+Housing Use within Prior 5 Years 	Yes
+
+ Public Safety
+
+Police Information 	 
+Bureau 	Central
+Division / Station 	Northeast
+Reporting District 	1173
+Fire Information 	 
+Bureau 	Central
+Battallion 	11
+District / Fire Station 	20
+Red Flag Restricted Parking 	No
+0.02 Miles
+100 Feet
+Generalized Zoning
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+          
+```
+
+### LADBS — Raw
+```
+=== OVERVIEW ===
+	An Official Website of the City of Los Angeles
+
+City Services
+
+City Directory
+
+Skip Dept Navigation to Main Content
+
+Address
+
+ 
+
+Results
+
+ 
+
+Details
+
+The following information was found based on your search criteria. Expand the sections and select the specific information for further detail.
+
+1923 N PRESTON AVE
+Parcel Profile Report:
+1
+Permit Information found:
+1
+Code Enforcement Information:
+0
+Certificate of Occupancy Information:
+0
+Retrofit Program Information:
+2
+ 
+Services
+Plan Review & Permitting
+Inspection
+Code Enforcement & Compliance
+Forms & Publications
+Forms
+Publications
+News & Announcements
+Our Organization
+Our Locations
+Employee Directory
+LADBS Senior Managers
+
+© Copyright 2010 -2026 City of Los Angeles. All Rights Reserved.
+
+ 
+Career Opportunities Contract Opportunities Disclaimer Privacy Policy Login
+
+=== PERMIT INFORMATION ===
+ 1923 N PRESTON AVE 90026
+Application/Permit #	PC/Job #	Type	Status	Work Description
+01014-20000-04989	B01VN01235	Bldg-Addition	Permit Finaled 12/7/2001	14' X 22' DECK ADDITION TO REAR OF (E)SFD. SEE COMMENTS.
+23016-90000-11226	--	Bldg-Alter/Repair	Permit Finaled 4/21/2023	Re-roof with Class A or B roof covering material weighing less than 6 pounds per sq. ft. over existing solid sheathing 14 Squares. Class A roof covering is required within Very High Fire Hazard Severity Zone (VHFHSZ). For residential roof replacement > 50% of the total roof area, apply Cool Roof Product labeled and certified by Cool Roof Rating Council (CRRC). Cool Roof may be required for non-residential buildings per Title 24, Part 6, Section 141.0(b)2B.
+02041-20000-18981	--	Electrical	Permit Finaled 10/17/2008	INSTALL ROOF MOUNTED SOLAR ELECTRIC SYSTEM
+02042-20000-08557	--	Plumbing	Permit Finaled 5/6/2002	WATER HEATER CHANGE OUT
+04042-90000-10325	--	Plumbing	Permit Finaled 4/15/2004	Installation of earthquake gas shut-off valve.
+10042-90000-05702	--	Plumbing	Permit Expired 9/6/2012	water heater change out
+
+=== PERMIT DETAIL: 01014-20000-04989 ===
+	An Official Website of the City of Los Angeles
+
+City Services
+
+City Directory
+
+Skip Dept Navigation to Main Content
+
+Address
+
+ 
+
+Results
+
+ 
+
+Details
+
+The following information was found based on your search criteria. Expand the sections and select the specific information for further detail.
+
+1923 N PRESTON AVE
+Parcel Profile Report:
+1
+Permit Information found:
+1
+ 1923 N PRESTON AVE 90026
+Application/Permit #	PC/Job #	Type	Status	Work Description
+01014-20000-04989	B01VN01235	Bldg-Addition	Permit Finaled 12/7/2001	14' X 22' DECK ADDITION TO REAR OF (E)SFD. SEE COMMENTS.
+23016-90000-11226	--	Bldg-Alter/Repair	Permit Finaled 4/21/2023	Re-roof with Class A or B roof covering material weighing less than 6 pounds per sq. ft. over existing solid sheathing 14 Squares. Class A roof covering is required within Very High Fire Hazard Severity Zone (VHFHSZ). For residential roof replacement > 50% of the total roof area, apply Cool Roof Product labeled and certified by Cool Roof Rating Council (CRRC). Cool Roof may be required for non-residential buildings per Title 24, Part 6, Section 141.0(b)2B.
+02041-20000-18981	--	Electrical	Permit Finaled 10/17/2008	INSTALL ROOF MOUNTED SOLAR ELECTRIC SYSTEM
+02042-20000-08557	--	Plumbing	Permit Finaled 5/6/2002	WATER HEATER CHANGE OUT
+04042-90000-10325	--	Plumbing	Permit Finaled 4/15/2004	Installation of earthquake gas shut-off valve.
+10042-90000-05702	--	Plumbing	Permit Expired 9/6/2012	water heater change out
+Code Enforcement Information:
+0
+Certificate of Occupancy Information:
+0
+Retrofit Program Information:
+2
+ 
+Services
+Plan Review & Permitting
+Inspection
+Code Enforcement & Compliance
+Forms & Publications
+Forms
+Publications
+News & Announcements
+Our Organization
+Our Locations
+Employee Directory
+LADBS Senior Managers
+
+© Copyright 2010 -2026 City of Los Angeles. All Rights Reserved.
+
+ 
+Career Opportunities Contract Opportunities Disclaimer Privacy Policy Login
+```

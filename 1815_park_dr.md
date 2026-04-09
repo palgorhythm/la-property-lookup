@@ -1,0 +1,527 @@
+# Property Report: 1815 Park Dr
+Generated: 2026-03-08 13:01
+
+## ZIMAS Data
+
+### Zoning & Land Use
+- **Zoning:** R2-1VL
+- **General Plan Land Use:** Low Medium I Residential
+- **Special Notes:** None
+- **Hillside Area (Zoning Code):** Yes
+- **Specific Plan Area:** None
+- **HCR: Hillside Construction Regulation:** No
+- **AB 2097: Within a half mile of a Major Transit Stop:** No
+- **Transit Oriented Communities (TOC):** Not Eligible
+- **Zoning Information (ZI):** ZI-2512 Housing Element Sites
+
+### Assessor / Property
+- **APN Area (Co. Public Works)*:** 0.160 (ac)
+- **Use Code:** 0100 - Residential - Single Family Residence
+- **Year Built:** 1914
+- **Building Class:** D65A
+- **Number of Units:** 1
+- **Number of Bedrooms:** 3
+- **Number of Bathrooms:** 3
+- **Building Square Footage:** 1,759.0 (sq ft)
+- **Assessed Land Val.:** $756,490
+- **Assessed Improvement Val.:** $347,309
+- **Last Owner Change:** 01/17/2014
+- **Last Sale Amount:** $866,125
+
+### Hazards
+- **Very High Fire Hazard Severity Zone:** Yes
+- **Fire District No. 1:** No
+- **Flood Zone:** Outside Flood Zone
+- **Alquist-Priolo Fault Zone:** No
+- **Nearest Fault (Distance in km):** Within Fault Zone
+- **Region:** Los Angeles Blind Thrusts
+- **Landslide:** No
+- **Liquefaction:** No
+
+### Jurisdiction
+- **Council District:** CD 13 - Hugo Soto-Martinez
+- **Community Plan Area:** Silver Lake - Echo Park - Elysian Valley
+- **Area Planning Commission:** East Los Angeles APC
+
+### Other Fields
+- **500 Ft Park Zone:** Active: Chavez Ravine Arboretum
+- **500 Ft School Zone:** None
+- **AB 130 Eligibility:** View
+- **AB 2011 Eligibility:** View
+- **AB 2334: Very Low Vehicle Travel Area:** Yes
+- **ASP: Alcohol Sales Program:** No
+- **Adaptive Reuse Program:** Citywide Adaptive Reuse Program
+- **Adaptive Reuse Subareas:** No
+- **Address:** 1815 PARK DR
+- **Administrative Review:** None
+- **Airport Hazard:** None
+- **Battallion:** 11
+- **Building 2:** No data for building 2
+- **Building 3:** No data for building 3
+- **Building 4:** No data for building 4
+- **Building 5:** No data for building 5
+- **Building Line:** None
+- **Building Permit Info:** View
+- **Bureau:** Central
+- **CDO: Community Design Overlay:** None
+- **CPIO Historic Preservation Review:** No
+- **CPIO: Community Plan Imp. Overlay:** None
+- **CUGU: Clean Up-Green Up:** None
+- **Canyon Bluff Potential:** No
+- **Census Tract #:** 1973.00000000
+- **Central City Parking:** No
+- **City Planning Commission:** CPC-1986-255
+- **Coastal Bluff Potential:** No
+- **Coastal Zone:** None
+- **Corridor Transition Incentive Area:** Not Eligible
+- **Deed Ref No. (City Clerk):** 1218508
+- **Dip Angle (degrees):** 50.00000000
+- **Direct all Housing Element Sites Inquiries to:** Los Angeles City Planning
+- **Direct all Inquiries to:** Los Angeles Housing Department
+- **District / Fire Station:** 20
+- **Division / Station:** Northeast
+- **Down Dip Width (km):** 13.00000000
+- **Downtown Parking:** No
+- **ED 1 Eligibility:** Not Eligible
+- **Ellis Act Property:** No
+- **Email:** planning.housingpolicy@lacity.org
+- **Environmental:** ENV-2003-7281-MND
+- **Farmland:** Area Not Mapped
+- **Fault Type:** B
+- **Font: A A A:** +/-
+- **General Plan Note(s):** Yes
+- **HE Replacement Required:** Yes
+- **High Quality Transit Corridor (within 1/2 mile):** Yes
+- **High Wind Velocity Areas:** No
+- **Historic Preservation Review:** No
+- **HistoricPlacesLA:** No
+- **Housing Crisis Act and Resident Protections Ordinance Replacement Review:** View
+- **Housing Use within Prior 5 Years:** Yes
+- **Inclusionary Housing:** No
+- **Interactive Map:** View
+- **Just Cause For Eviction Ordinance (JCO):** Yes
+- **LADBS District Office:** Los Angeles Metro
+- **Local Affordable Housing Incentive:** No
+- **Maximum Magnitude:** 6.40000000
+- **Methane Hazard Site:** None
+- **Minimum Density Requirement:** No
+- **NSO: Neighborhood Stabilization Overlay:** No
+- **Nearest Fault (Name):** Upper Elysian Park
+- **Neighborhood Council:** ECHO PARK NC
+- **Non-Residential Market Area:** High
+- **Notes:** The Just Cause Ordinance applies after the expiration of the initial lease or after 6 months of continuous occupancy, whichever comes first.
+- **Oil Well Adjacency:** No
+- **Opportunity Corridors Incentive Area:** Not Eligible
+- **Ordinance:** ORD-129279
+- **POD: Pedestrian Oriented Districts:** None
+- **Preliminary Fault Rupture Study Area:** None
+- **RBP: Restaurant Beverage Program Eligible Area:** None
+- **RFA: Residential Floor Area District:** None
+- **RIO: River Implementation Overlay:** No
+- **RPA: Redevelopment Project Area:** None
+- **Recent Activity:** None
+- **Red Flag Restricted Parking:** No
+- **Rent Stabilization Ordinance (RSO):** No [APN: 5415011007]
+- **Reporting District:** 1184
+- **Residential Market Area:** Medium-High
+- **Rupture Bottom:** 13.00000000
+- **Rupture Top:** 3.00000000
+- **SB 166 Units:** Appendix 4.1 0.11
+- **SB 35 Eligibility:** View
+- **SB 9 Eligibility:** View
+- **SHRA / SB 684 Eligibility:** View
+- **SN: Sign District:** No
+- **Sea Level Rise Area:** No
+- **Slip Geometry:** Reverse
+- **Slip Rate (mm/year):** 1.30000000
+- **Slip Type:** Poorly Constrained
+- **Special Grading Area (BOE Basic Grid Map A-13372):** Yes
+- **Special Land Use / Zoning:** None
+- **Special Lot Line:** No
+- **Streetscape:** No
+- **Subarea:** None
+- **TCAC Opportunity Area:** High
+- **Targeted Planting:** No
+- **Tax Rate Area:** 13
+- **Telephone:** (866) 557-7368
+- **Transit Oriented Incentive Area (TOIA):** Not Eligible
+- **Tsunami Hazard Area:** No
+- **Universal Planning Review Service Applicability:** Needs Review
+- **Urban Agriculture Incentive Zone:** YES
+- **Watercourse:** No
+- **Website:** housing.lacity.gov
+- **Wells:** None
+- **Zanja System 1 Mile Buffer:** No
+
+## LADBS Data
+
+### Overview
+- **Parcel Profile Report:** 1
+- **Permit Information found:** 1
+- **Code Enforcement Information:** 7
+- **Certificate of Occupancy Information:** 1
+- **Retrofit Program Information:** 2
+
+### Permit Numbers
+- [19041-90000-50936](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=19041&id2=90000&id3=50936)
+- [20016-10000-32430](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=20016&id2=10000&id3=32430)
+- [15041-20000-00444](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=15041&id2=20000&id3=00444)
+- [15042-10000-04707](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=15042&id2=10000&id3=04707)
+- [14030-10000-07181](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=14030&id2=10000&id3=07181)
+- [20030-10000-03200](https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=20030&id2=10000&id3=03200)
+
+---
+## Raw Output
+
+### ZIMAS — Raw
+```
+Terms & Conditions
+Public
+Search	Reports	Resources	News!	Help	 
+1815 N PARK DR	
+	 	Font: A A A	 +/- 	
+ Address/Legal
+
+ Jurisdictional
+
+Community Plan Area 	Silver Lake - Echo Park - Elysian Valley
+Area Planning Commission 	East Los Angeles APC
+Neighborhood Council 	ECHO PARK NC
+Council District 	CD 13 - Hugo Soto-Martinez
+Census Tract # 	1973.00000000
+LADBS District Office 	Los Angeles Metro
+
+ Permitting and Zoning Compliance
+
+Building Permit Info 	View
+Administrative Review 	None
+
+ Planning and Zoning
+
+Special Notes 	None
+Zoning 	R2-1VL
+Zoning Information (ZI) 	ZI-2512 Housing Element Sites
+General Plan Land Use 	Low Medium I Residential
+General Plan Note(s) 	Yes
+Minimum Density Requirement 	No
+Hillside Area (Zoning Code) 	Yes
+Specific Plan Area 	None
+Subarea 	None
+Special Land Use / Zoning 	None
+Historic Preservation Review 	No
+HistoricPlacesLA 	No
+CDO: Community Design Overlay 	None
+CPIO: Community Plan Imp. Overlay 	None
+Subarea 	None
+CPIO Historic Preservation Review 	No
+CUGU: Clean Up-Green Up 	None
+HCR: Hillside Construction Regulation 	No
+NSO: Neighborhood Stabilization Overlay 	No
+POD: Pedestrian Oriented Districts 	None
+RBP: Restaurant Beverage Program Eligible Area 	None
+ASP: Alcohol Sales Program 	No
+RFA: Residential Floor Area District 	None
+RIO: River Implementation Overlay 	No
+SN: Sign District 	No
+SB 9 Eligibility 	View
+SB 35 Eligibility 	View
+SHRA / SB 684 Eligibility 	View
+AB 2334: Very Low Vehicle Travel Area 	Yes
+AB 2097: Within a half mile of a Major Transit Stop 	No
+AB 2011 Eligibility 	View
+AB 130 Eligibility 	View
+Streetscape 	No
+Adaptive Reuse Subareas 	No
+Adaptive Reuse Program 	Citywide Adaptive Reuse Program
+Affordable Housing Linkage Fee 	 
+Residential Market Area 	Medium-High
+Non-Residential Market Area 	High
+Inclusionary Housing 	No
+Local Affordable Housing Incentive 	No
+Targeted Planting 	No
+Special Lot Line 	No
+Transit Oriented Communities (TOC) 	Not Eligible
+Mixed Income Incentive Programs 	 
+Transit Oriented Incentive Area (TOIA) 	Not Eligible
+Opportunity Corridors Incentive Area 	Not Eligible
+Corridor Transition Incentive Area 	Not Eligible
+TCAC Opportunity Area 	High
+High Quality Transit Corridor (within 1/2 mile) 	Yes
+ED 1 Eligibility 	Not Eligible
+RPA: Redevelopment Project Area 	None
+Central City Parking 	No
+Downtown Parking 	No
+Building Line 	None
+500 Ft School Zone 	None
+500 Ft Park Zone 	Active: Elysian Park
+500 Ft Park Zone 	Active: Chavez Ravine Arboretum
+Zanja System 1 Mile Buffer 	No
+
+ Assessor
+
+Assessor Parcel No. (APN) 	
+5415011007
+
+Ownership (Assessor) 	
+Owner1 	
+Owner2 	
+Address 	
+Ownership (Bureau of Engineering, Land Records) 	
+Owner 	
+Address 	
+APN Area (Co. Public Works)* 	0.160 (ac)
+Use Code 	0100 - Residential - Single Family Residence
+Assessed Land Val. 	$756,490
+Assessed Improvement Val. 	$347,309
+Last Owner Change 	01/17/2014
+Last Sale Amount 	$866,125
+Tax Rate Area 	13
+Deed Ref No. (City Clerk) 	55150
+Deed Ref No. (City Clerk) 	5-555
+Deed Ref No. (City Clerk) 	400963
+Deed Ref No. (City Clerk) 	1218509
+Deed Ref No. (City Clerk) 	1218508
+Building 1 	 
+Year Built 	1914
+Building Class 	D65A
+Number of Units 	1
+Number of Bedrooms 	3
+Number of Bathrooms 	3
+Building Square Footage 	1,759.0 (sq ft)
+Building 2 	No data for building 2
+Building 3 	No data for building 3
+Building 4 	No data for building 4
+Building 5 	No data for building 5
+
+ Case Numbers
+
+Recent Activity 	None
+City Planning Commission 	CPC-2008-4683-CA
+City Planning Commission 	CPC-1986-255
+Ordinance 	ORD-181128
+Ordinance 	ORD-165167-SA3855
+Ordinance 	ORD-129279
+Environmental 	ENV-2008-4684-ND
+Environmental 	ENV-2003-7281-MND
+
+ Citywide/Code Amendment Cases
+
+ Additional
+
+Airport Hazard 	None
+Coastal Zone 	None
+Coastal Bluff Potential 	No
+Canyon Bluff Potential 	No
+Farmland 	Area Not Mapped
+Urban Agriculture Incentive Zone 	YES
+Very High Fire Hazard Severity Zone 	Yes
+Fire District No. 1 	No
+Flood Zone 	Outside Flood Zone
+Watercourse 	No
+Methane Hazard Site 	None
+High Wind Velocity Areas 	No
+Special Grading Area (BOE Basic Grid Map A-13372) 	Yes
+Wells 	None
+Sea Level Rise Area 	No
+Oil Well Adjacency 	No
+Universal Planning Review Service Applicability 	Needs Review
+
+ Environmental
+
+ Seismic Hazards
+
+Active Fault Near-Source Zone 	 
+Nearest Fault (Distance in km) 	Within Fault Zone
+Nearest Fault (Name) 	Upper Elysian Park
+Region 	Los Angeles Blind Thrusts
+Fault Type 	B
+Slip Rate (mm/year) 	1.30000000
+Slip Geometry 	Reverse
+Slip Type 	Poorly Constrained
+Down Dip Width (km) 	13.00000000
+Rupture Top 	3.00000000
+Rupture Bottom 	13.00000000
+Dip Angle (degrees) 	50.00000000
+Maximum Magnitude 	6.40000000
+Alquist-Priolo Fault Zone 	No
+Landslide 	No
+Liquefaction 	No
+Preliminary Fault Rupture Study Area 	None
+Tsunami Hazard Area 	No
+
+ Economic Development Areas
+
+ Housing
+
+Direct all Inquiries to 	Los Angeles Housing Department
+Telephone 	(866) 557-7368
+Website 	housing.lacity.gov
+Rent Stabilization Ordinance (RSO) 	No [APN: 5415011007]
+Ellis Act Property 	No
+Just Cause For Eviction Ordinance (JCO) 	Yes
+Assessor Parcel No. (APN) 	
+5415011007
+
+Address 	1815 PARK DR
+Year Built 	1914
+Use Code 	0100 - Residential - Single Family Residence
+Notes 	The Just Cause Ordinance applies after the expiration of the initial lease or after 6 months of continuous occupancy, whichever comes first.
+Housing Crisis Act and Resident Protections Ordinance Replacement Review 	View
+Direct all Housing Element Sites Inquiries to 	Los Angeles City Planning
+Email 	planning.housingpolicy@lacity.org
+Housing Element Sites 	 
+HE Replacement Required 	Yes
+SB 166 Units 	Appendix 4.1 0.11
+Interactive Map 	View
+Housing Use within Prior 5 Years 	Yes
+
+ Public Safety
+
+Police Information 	 
+Bureau 	Central
+Division / Station 	Northeast
+Reporting District 	1184
+Fire Information 	 
+Bureau 	Central
+Battallion 	11
+District / Fire Station 	20
+Red Flag Restricted Parking 	No
+0.02 Miles
+100 Feet
+Generalized Zoning
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+          
+```
+
+### LADBS — Raw
+```
+=== OVERVIEW ===
+	An Official Website of the City of Los Angeles
+
+City Services
+
+City Directory
+
+Skip Dept Navigation to Main Content
+
+Address
+
+ 
+
+Results
+
+ 
+
+Details
+
+The following information was found based on your search criteria. Expand the sections and select the specific information for further detail.
+
+1815 N PARK DR
+Parcel Profile Report:
+1
+Permit Information found:
+1
+Code Enforcement Information:
+7
+Certificate of Occupancy Information:
+1
+Retrofit Program Information:
+2
+ 
+Services
+Plan Review & Permitting
+Inspection
+Code Enforcement & Compliance
+Forms & Publications
+Forms
+Publications
+News & Announcements
+Our Organization
+Our Locations
+Employee Directory
+LADBS Senior Managers
+
+© Copyright 2010 -2026 City of Los Angeles. All Rights Reserved.
+
+ 
+Career Opportunities Contract Opportunities Disclaimer Privacy Policy Login
+
+=== PERMIT INFORMATION ===
+ 1815 N PARK DR 90026
+Application/Permit #	PC/Job #	Type	Status	Work Description
+20016-10000-32430	B20LA23313	Bldg-Alter/Repair	CofO Issued 1/21/2023	ADDITION & ALTERATION TO (E) SINGLE FAMILY DWELLING & CONVERT (E) 248 S.F. OF UNDER FLOOR AREA TO HABITABLE ARAE & ADD UNCOVERED ATTACHED DEACK & STAIRS TO REAR OF BUILDING.
+15041-20000-00444	X15VN00296	Electrical	Permit Finaled 2/3/2015	UPGRADING MAIN SERVICE TO 200 AMP. AND INSTALLING (1) NEW CIRCUIT FOR JACUZZI.
+19041-90000-50936	--	Electrical	Permit Finaled 2/24/2020	Installation of roof-mounted solar PV system, not exceeding a total AC output of 10 kW, in a 1 or 2 family dwelling
+14030-10000-07181	B14LA15596	Grading	Application Pending 11/13/2014	***GPI ONLY*** ADDITION OF 1 BEDROOM AND 1 BATHROOM AND 2 DECKS 410 SQFT ADDITION (TOTAL) CONVERT UNDERFLOOR AREA TO HABITABLE AREA
+20030-10000-03200	B20LA10983	Grading	Application Pending 6/22/2020	***GRADING PRE-INSPECTION + POSTING*** CONVERT PORTION OF EXISTING UNDERFLOOR AREA HABITABLE SF AND NEW ADDITION AT REAR. ADD 497 SF. (TOTAL ADDITION >500 SQFT)
+15042-10000-04707	M15LA01086	Plumbing	Permit Expired 3/31/2017	Installation of simple graywater system in SFD.
+
+=== PERMIT DETAIL: 20016-10000-32430 ===
+	An Official Website of the City of Los Angeles
+
+City Services
+
+City Directory
+
+Skip Dept Navigation to Main Content
+
+Address
+
+ 
+
+Results
+
+ 
+
+Details
+
+The following information was found based on your search criteria. Expand the sections and select the specific information for further detail.
+
+1815 N PARK DR
+Parcel Profile Report:
+1
+Permit Information found:
+1
+ 1815 N PARK DR 90026
+Application/Permit #	PC/Job #	Type	Status	Work Description
+20016-10000-32430	B20LA23313	Bldg-Alter/Repair	CofO Issued 1/21/2023	ADDITION & ALTERATION TO (E) SINGLE FAMILY DWELLING & CONVERT (E) 248 S.F. OF UNDER FLOOR AREA TO HABITABLE ARAE & ADD UNCOVERED ATTACHED DEACK & STAIRS TO REAR OF BUILDING.
+15041-20000-00444	X15VN00296	Electrical	Permit Finaled 2/3/2015	UPGRADING MAIN SERVICE TO 200 AMP. AND INSTALLING (1) NEW CIRCUIT FOR JACUZZI.
+19041-90000-50936	--	Electrical	Permit Finaled 2/24/2020	Installation of roof-mounted solar PV system, not exceeding a total AC output of 10 kW, in a 1 or 2 family dwelling
+14030-10000-07181	B14LA15596	Grading	Application Pending 11/13/2014	***GPI ONLY*** ADDITION OF 1 BEDROOM AND 1 BATHROOM AND 2 DECKS 410 SQFT ADDITION (TOTAL) CONVERT UNDERFLOOR AREA TO HABITABLE AREA
+20030-10000-03200	B20LA10983	Grading	Application Pending 6/22/2020	***GRADING PRE-INSPECTION + POSTING*** CONVERT PORTION OF EXISTING UNDERFLOOR AREA HABITABLE SF AND NEW ADDITION AT REAR. ADD 497 SF. (TOTAL ADDITION >500 SQFT)
+15042-10000-04707	M15LA01086	Plumbing	Permit Expired 3/31/2017	Installation of simple graywater system in SFD.
+Code Enforcement Information:
+7
+Certificate of Occupancy Information:
+1
+Retrofit Program Information:
+2
+ 
+Services
+Plan Review & Permitting
+Inspection
+Code Enforcement & Compliance
+Forms & Publications
+Forms
+Publications
+News & Announcements
+Our Organization
+Our Locations
+Employee Directory
+LADBS Senior Managers
+
+© Copyright 2010 -2026 City of Los Angeles. All Rights Reserved.
+
+ 
+Career Opportunities Contract Opportunities Disclaimer Privacy Policy Login
+```
