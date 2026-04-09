@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LA Property Lookup</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; color: #222; }
+    header { background: #1a1a2e; color: white; padding: 1.25rem 1.5rem; }
+    header h1 { font-size: 1.2rem; font-weight: 600; }
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem; }
+    .search-bar { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .search-bar input { flex: 1; padding: 0.65rem 1rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 6px; }
+    .search-bar button { padding: 0.65rem 1.2rem; background: #1a1a2e; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; white-space: nowrap; }
+    .search-bar button:disabled { opacity: 0.6; cursor: not-allowed; }
+    #status { margin-bottom: 1rem; font-size: 0.875rem; color: #555; min-height: 1.2em; }
+    .card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 1rem; overflow: hidden; }
+    .card-header { padding: 0.75rem 1rem; background: #f0f0f0; font-weight: 600; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
+    .card-header .badge { font-size: 0.75rem; font-weight: 500; padding: 0.2rem 0.5rem; border-radius: 4px; }
+    .badge-ok { background: #d4edda; color: #155724; }
+    .badge-warn { background: #fff3cd; color: #856404; }
+    .badge-danger { background: #f8d7da; color: #721c24; }
+    .badge-none { background: #e9ecef; color: #495057; }
+    .card-body { padding: 0.75rem 1rem; }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem 1.5rem; }
+    @media (max-width: 600px) { .field-grid { grid-template-columns: 1fr; } }
+    .field { display: flex; flex-direction: column; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; }
+    .field:last-child { border-bottom: none; }
+    .field label { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.03em; }
+    .field value { font-size: 0.9rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    th { background: #f8f8f8; text-align: left; padding: 0.45rem 0.65rem; font-weight: 600; border-bottom: 2px solid #e0e0e0; }
+    td { padding: 0.4rem 0.65rem; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    .actions { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .btn-secondary { padding: 0.5rem 1rem; background: white; border: 1px solid #ccc; border-radius: 6px; font-size: 0.875rem; cursor: pointer; }
+    .btn-secondary:hover { background: #f5f5f5; }
+    #results { display: none; }
+    .error-msg { background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.875rem; }
+    a { color: #1a1a2e; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>LA Property Lookup</h1>
+  </header>
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" id="addressInput" placeholder="1815 Park Dr" value="" />
+      <button id="lookupBtn" onclick="runLookup()">Look Up</button>
+    </div>
+    <div id="status"></div>
+    <div id="results">
+      <div class="actions">
+        <button class="btn-secondary" onclick="copyMarkdown()">Copy as Markdown</button>
+      </div>
+      <div id="cards"></div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('addressInput');
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') runLookup(); });
+
+    function setStatus(msg) { document.getElementById('status').textContent = msg; }
+
+    // ── Address parsing ──────────────────────────────────────────────────────
+    const SUFFIXES = ['BLVD','AVE','DR','ST','PL','WAY','CT','RD','LN','CIR','TER','HWY','FWY','PKWY'];
+    const DIRS = ['N','S','E','W','NORTH','SOUTH','EAST','WEST'];
+
+    function parseAddress(raw) {
+      const parts = raw.trim().toUpperCase().split(/\s+/);
+      const number = parts[0];
+      const rest = parts.slice(1);
+      let suffix = '', direction = '';
+      let suffixIdx = -1;
+      for (let i = rest.length - 1; i >= 0; i--) { if (SUFFIXES.includes(rest[i])) { suffixIdx = i; break; } }
+      if (suffixIdx !== -1) suffix = rest[suffixIdx];
+      const dirIdx = rest.findIndex(p => DIRS.includes(p));
+      if (dirIdx !== -1) direction = rest[dirIdx];
+      const nameTokens = rest.filter((p, i) => i !== suffixIdx && !DIRS.includes(p));
+      const street = nameTokens.join(' ');
+      return { number, street, suffix, direction };
+    }
+
+    // ── API helpers ──────────────────────────────────────────────────────────
+    async function fetchJSON(url) {
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    }
+
+    async function geocode(address) {
+      const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=${encodeURIComponent(address + ', Los Angeles, CA')}&outFields=*&maxLocations=1&f=json`;
+      const data = await fetchJSON(url);
+      const c = data.candidates?.[0];
+      if (!c) throw new Error('Address not found');
+      return { lat: c.location.y, lon: c.location.x, label: c.address };
+    }
+
+    async function getParcel(lat, lon) {
+      const url = `https://cache.gis.lacounty.gov/cache/rest/services/LACounty_Cache/LACounty_Parcel/MapServer/0/query?geometry=${lon},${lat}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json`;
+      const data = await fetchJSON(url);
+      return data.features?.[0]?.attributes ?? null;
+    }
+
+    async function getZoning(lat, lon) {
+      const url = `https://data.lacity.org/resource/jjxn-vhan.json?$where=intersects(the_geom,'POINT(${lon} ${lat})')&$limit=1`;
+      const data = await fetchJSON(url);
+      return data[0] ?? null;
+    }
+
+    async function getFireHazard(lat, lon) {
+      const url = `https://data.lacity.org/resource/45pp-x98f.json?$where=intersects(the_geom,'POINT(${lon} ${lat})')&$limit=1`;
+      const data = await fetchJSON(url);
+      return data.length > 0;
+    }
+
+    function socrataURL(dataset, params) {
+      return `https://data.lacity.org/resource/${dataset}.json?` + new URLSearchParams(params);
+    }
+
+    async function getPermitsNew(address) {
+      const { number, street } = parseAddress(address);
+      return fetchJSON(socrataURL('pi9x-tg5x', {
+        '$where': `primary_address like '${number}%${street}%'`,
+        '$limit': '20',
+        '$order': 'issue_date DESC',
+      }));
+    }
+
+    async function getPermitsAll(address) {
+      // hbkd-qubn: all LADBS permits (building, electrical, plumbing, mechanical)
+      const { number, street } = parseAddress(address);
+      return fetchJSON(socrataURL('hbkd-qubn', {
+        'address_start': number,
+        'street_name': street,
+        '$limit': '25',
+        '$order': 'issue_date DESC',
+      }));
+    }
+
+    async function getCEClosed(address) {
+      const { number, street } = parseAddress(address);
+      return fetchJSON(socrataURL('rken-a55j', { 'stno': number, 'stname': street, '$limit': '20' }));
+    }
+
+    async function getCEOpen(address) {
+      const { number, street } = parseAddress(address);
+      return fetchJSON(socrataURL('u82d-eh7z', { 'stno': number, 'stname': street, '$limit': '20' }));
+    }
+
+    // ── Main lookup ──────────────────────────────────────────────────────────
+    let lastResult = null;
+
+    async function runLookup() {
+      const address = input.value.trim();
+      if (!address) return;
+
+      document.getElementById('results').style.display = 'none';
+      document.getElementById('cards').innerHTML = '';
+      document.getElementById('lookupBtn').disabled = true;
+      setStatus('Geocoding address…');
+
+      try {
+        const coords = await geocode(address);
+        setStatus(`Found: ${coords.label} — fetching property data…`);
+
+        const [parcel, zoning, fireHazard, permitsNew, permitsAll, ceOpen, ceClosed] = await Promise.allSettled([
+          getParcel(coords.lat, coords.lon),
+          getZoning(coords.lat, coords.lon),
+          getFireHazard(coords.lat, coords.lon),
+          getPermitsNew(address),
+          getPermitsAll(address),
+          getCEOpen(address),
+          getCEClosed(address),
+        ]);
+
+        const p = parcel.value;
+        const z = zoning.value;
+        const fire = fireHazard.value;
+
+        // Dedupe permits by permit number; pi9x-tg5x first (has status/zone data)
+        const seen = new Set();
+        const allPermits = [
+          ...(permitsNew.value ?? []),
+          ...(permitsAll.value ?? []),
+        ].filter(permit => {
+          const key = permit.permit_nbr || permit.pcis_permit || JSON.stringify(permit);
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+
+        const ceOpenList = ceOpen.value ?? [];
+        const ceClosedList = ceClosed.value ?? [];
+
+        lastResult = { coords, parcel: p, zoning: z, fireHazard: fire, permits: allPermits, ceOpen: ceOpenList, ceClosed: ceClosedList };
+
+        renderResults(lastResult, address);
+        document.getElementById('results').style.display = 'block';
+        setStatus('');
+      } catch (err) {
+        setStatus('');
+        document.getElementById('cards').innerHTML = `<div class="error-msg">Error: ${err.message}</div>`;
+        document.getElementById('results').style.display = 'block';
+      } finally {
+        document.getElementById('lookupBtn').disabled = false;
+      }
+    }
+
+    // ── Rendering ────────────────────────────────────────────────────────────
+    function field(label, value) {
+      if (!value && value !== 0) return '';
+      return `<div class="field"><label>${label}</label><value>${value}</value></div>`;
+    }
+
+    function card(title, badgeText, badgeClass, body) {
+      const badge = badgeText ? `<span class="badge ${badgeClass}">${badgeText}</span>` : '';
+      return `<div class="card">
+        <div class="card-header">${title}${badge}</div>
+        <div class="card-body">${body}</div>
+      </div>`;
+    }
+
+    function renderResults(r, address) {
+      const cards = [];
+      const p = r.parcel;
+      const z = r.zoning;
+
+      // ── Overview card ─────────────────────────────────────────────────────
+      const zoneCode = z?.zone_cmplt ?? r.permits?.[0]?.zone ?? '—';
+      const apn = p?.APN ?? p?.apn ?? r.permits?.[0]?.apn ?? '—';
+      const firstPermit = r.permits?.[0];
+      const cd = firstPermit?.cd ?? '—';
+      const cpa = firstPermit?.cpa ?? '—';
+      const cnc = firstPermit?.cnc ?? '—';
+      const apc = firstPermit?.apc ?? '—';
+
+      const overviewBody = `<div class="field-grid">
+        ${field('Address', r.coords.label)}
+        ${field('APN', apn)}
+        ${field('Zoning', zoneCode)}
+        ${field('Council District', cd)}
+        ${field('Community Plan Area', cpa)}
+        ${field('Neighborhood Council', cnc)}
+        ${field('Area Planning Commission', apc)}
+        ${field('Very High Fire Hazard Zone', r.fireHazard ? 'YES' : 'No')}
+      </div>`;
+      cards.push(card('Overview', null, '', overviewBody));
+
+      // ── Assessor card ─────────────────────────────────────────────────────
+      if (p) {
+        const units = [1,2,3,4,5].map(i => p[`Units${i}`]).filter(Boolean);
+        const yr = p.YearBuilt1 ?? '—';
+        const sf = p.SQFTmain1 ? p.SQFTmain1.toLocaleString() + ' sq ft' : '—';
+        const beds = p.Bedrooms1 ?? '—';
+        const baths = p.Bathrooms1 ?? '—';
+        const land = p.Roll_LandValue ? '$' + p.Roll_LandValue.toLocaleString() : '—';
+        const imp = p.Roll_ImpValue ? '$' + p.Roll_ImpValue.toLocaleString() : '—';
+        const total = (p.Roll_LandValue && p.Roll_ImpValue) ? '$' + (p.Roll_LandValue + p.Roll_ImpValue).toLocaleString() : '—';
+        const useDesc = p.UseDescription ?? '—';
+        const designType = p.DesignType1 ?? '—';
+        const legalDesc = p.LegalDescription ?? '';
+
+        const assessorBody = `<div class="field-grid">
+          ${field('Year Built', yr)}
+          ${field('Use', useDesc)}
+          ${field('Building Class', designType)}
+          ${field('Units', units.length > 1 ? units.join(', ') : (p.Units1 ?? '—'))}
+          ${field('Bedrooms', beds)}
+          ${field('Bathrooms', baths)}
+          ${field('Building Sq Ft', sf)}
+          ${field('Assessed Land', land)}
+          ${field('Assessed Improvement', imp)}
+          ${field('Total Assessed', total)}
+          ${field('Base Year (Land)', p.Roll_LandBaseYear ?? '—')}
+          ${field('Base Year (Improvement)', p.Roll_ImpBaseYear ?? '—')}
+          ${legalDesc ? field('Legal Description', legalDesc) : ''}
+        </div>`;
+        cards.push(card('Assessor / Parcel', null, '', assessorBody));
+      }
+
+      // ── Permits card ──────────────────────────────────────────────────────
+      const permits = r.permits;
+      if (permits.length > 0) {
+        const rows = permits.map(p => {
+          const num = p.permit_nbr || p.pcis_permit || '—';
+          const type = p.permit_type || '—';
+          const sub = p.permit_sub_type || p.permit_category || '';
+          const status = p.status_desc || p.latest_status || '—';
+          const date = (p.status_date || p.issue_date || '').substring(0, 10);
+          const desc = (p.work_desc || p.work_description || '').substring(0, 120);
+          const link = num !== '—' ? `<a href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=${num.split('-')[0]}&id2=${num.split('-')[1]}&id3=${num.split('-')[2]}" target="_blank">${num}</a>` : num;
+          return `<tr><td>${link}</td><td>${type}${sub ? '<br><span style="color:#888;font-size:0.78rem">' + sub + '</span>' : ''}</td><td>${status}</td><td>${date}</td><td style="max-width:260px">${desc}</td></tr>`;
+        }).join('');
+        const tableBody = `<table><thead><tr><th>Permit #</th><th>Type</th><th>Status</th><th>Date</th><th>Description</th></tr></thead><tbody>${rows}</tbody></table>`;
+        cards.push(card('Permits', `${permits.length} found`, 'badge-ok', tableBody));
+      } else {
+        cards.push(card('Permits', 'None found', 'badge-none', '<p style="font-size:0.875rem;color:#888">No permits returned.</p>'));
+      }
+
+      // ── Code Enforcement card ─────────────────────────────────────────────
+      const allCE = [
+        ...r.ceOpen.map(c => ({ ...c, _status: 'Open' })),
+        ...r.ceClosed.map(c => ({ ...c, _status: 'Closed' })),
+      ];
+      if (allCE.length > 0) {
+        const rows = allCE.map(c => {
+          const caseNo = c.apno ?? '—';
+          const type = c.aptype ?? '—';
+          const status = c._status;
+          const added = (c.adddttm || '').substring(0, 10);
+          const resolved = (c.resdttm || '').substring(0, 10);
+          const badgeCls = status === 'Open' ? 'background:#f8d7da;color:#721c24' : 'background:#d4edda;color:#155724';
+          return `<tr><td>${caseNo}</td><td>${type}</td><td><span style="font-size:0.75rem;padding:0.15rem 0.4rem;border-radius:3px;${badgeCls}">${status}</span></td><td>${added}</td><td>${resolved || '—'}</td></tr>`;
+        }).join('');
+        const ceBadge = r.ceOpen.length > 0 ? `${r.ceOpen.length} open` : `${allCE.length} closed`;
+        const ceBadgeCls = r.ceOpen.length > 0 ? 'badge-danger' : 'badge-none';
+        const tableBody = `<table><thead><tr><th>Case #</th><th>Type</th><th>Status</th><th>Opened</th><th>Resolved</th></tr></thead><tbody>${rows}</tbody></table>`;
+        cards.push(card('Code Enforcement', ceBadge, ceBadgeCls, tableBody));
+      } else {
+        cards.push(card('Code Enforcement', 'None found', 'badge-ok', '<p style="font-size:0.875rem;color:#888">No code enforcement cases returned.</p>'));
+      }
+
+      document.getElementById('cards').innerHTML = cards.join('');
+    }
+
+    // ── Copy as Markdown ─────────────────────────────────────────────────────
+    function copyMarkdown() {
+      if (!lastResult) return;
+      const r = lastResult;
+      const p = r.parcel;
+      const z = r.zoning;
+      const firstPermit = r.permits?.[0];
+
+      const lines = [];
+      lines.push(`# Property Report: ${r.coords.label}`);
+      lines.push(`Generated: ${new Date().toLocaleDateString()}\n`);
+
+      lines.push('## Overview');
+      lines.push(`- **Zoning:** ${z?.zone_cmplt ?? firstPermit?.zone ?? '—'}`);
+      lines.push(`- **APN:** ${p?.APN ?? firstPermit?.apn ?? '—'}`);
+      lines.push(`- **Council District:** ${firstPermit?.cd ?? '—'}`);
+      lines.push(`- **Community Plan Area:** ${firstPermit?.cpa ?? '—'}`);
+      lines.push(`- **Neighborhood Council:** ${firstPermit?.cnc ?? '—'}`);
+      lines.push(`- **Very High Fire Hazard Zone:** ${r.fireHazard ? 'YES' : 'No'}\n`);
+
+      if (p) {
+        lines.push('## Assessor / Parcel');
+        const pairs = [
+          ['Year Built', p.YearBuilt1],
+          ['Use', p.UseDescription],
+          ['Units', p.Units1],
+          ['Bedrooms', p.Bedrooms1],
+          ['Bathrooms', p.Bathrooms1],
+          ['Building Sq Ft', p.SQFTmain1 ? p.SQFTmain1.toLocaleString() + ' sq ft' : null],
+          ['Assessed Land', p.Roll_LandValue ? '$' + p.Roll_LandValue.toLocaleString() : null],
+          ['Assessed Improvement', p.Roll_ImpValue ? '$' + p.Roll_ImpValue.toLocaleString() : null],
+          ['Total Assessed', (p.Roll_LandValue && p.Roll_ImpValue) ? '$' + (p.Roll_LandValue + p.Roll_ImpValue).toLocaleString() : null],
+          ['Legal Description', p.LegalDescription],
+        ];
+        pairs.forEach(([k, v]) => { if (v) lines.push(`- **${k}:** ${v}`); });
+        lines.push('');
+      }
+
+      if (r.permits.length > 0) {
+        lines.push('## Permits');
+        r.permits.forEach(permit => {
+          const num = permit.permit_nbr || permit.pcis_permit || '—';
+          const type = permit.permit_type || '—';
+          const status = permit.status_desc || permit.latest_status || '—';
+          const date = (permit.status_date || permit.issue_date || '').substring(0, 10);
+          const desc = permit.work_desc || permit.work_description || '';
+          lines.push(`- **${num}** — ${type} — ${status} (${date})`);
+          if (desc) lines.push(`  ${desc}`);
+        });
+        lines.push('');
+      }
+
+      const allCE = [
+        ...r.ceOpen.map(c => ({ ...c, _status: 'Open' })),
+        ...r.ceClosed.map(c => ({ ...c, _status: 'Closed' })),
+      ];
+      if (allCE.length > 0) {
+        lines.push('## Code Enforcement');
+        allCE.forEach(c => {
+          const added = (c.adddttm || '').substring(0, 10);
+          const resolved = c.resdttm ? ` → resolved ${c.resdttm.substring(0,10)}` : '';
+          lines.push(`- Case ${c.apno} — ${c.aptype} — **${c._status}** (opened ${added}${resolved})`);
+        });
+        lines.push('');
+      }
+
+      navigator.clipboard.writeText(lines.join('\n'))
+        .then(() => { const btn = document.querySelector('.btn-secondary'); btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy as Markdown'; }, 2000); });
+    }
+  </script>
+</body>
+</html>
