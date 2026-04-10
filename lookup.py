@@ -563,7 +563,7 @@ def format_markdown(zimas: dict, ladbs: dict) -> str:
 
 async def main():
     parser = argparse.ArgumentParser(description="Look up LA property data from ZIMAS and LADBS")
-    parser.add_argument("address", help="Street address (e.g., '1815 Park Dr')")
+    parser.add_argument("address", help="Full address with city, state, zip (e.g., '1815 Park Dr, Los Angeles, CA 90026')")
     parser.add_argument("--output", choices=["json", "markdown"], default="markdown")
     parser.add_argument("--save", help="Save output to file")
     parser.add_argument("--headed", action="store_true", help="Visible browser")

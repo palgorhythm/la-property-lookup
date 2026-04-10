@@ -1,0 +1,48 @@
+name: Cleanup Old Results
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Delete result files older than 24 hours
+        run: |
+          python3 - <<'EOF'
+          import os, time, subprocess
+
+          now_ms = int(time.time() * 1000)
+          ttl_ms = 24 * 60 * 60 * 1000
+          removed = []
+
+          for fname in os.listdir('output'):
+              if not fname.endswith('.md') or fname == '.gitkeep':
+                  continue
+              key = fname.replace('.md', '')
+              try:
+                  if now_ms - int(key) > ttl_ms:
+                      subprocess.run(['git', 'rm', f'output/{fname}'], check=True)
+                      removed.append(fname)
+              except ValueError:
+                  pass  # non-timestamp filename, skip
+
+          if removed:
+              print(f"Removed {len(removed)} expired file(s): {', '.join(removed)}")
+          else:
+              print("Nothing to clean up")
+          EOF
+
+      - name: Commit if anything was removed
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git diff --staged --quiet || git commit -m "cleanup: remove expired lookup results"
+          git push || true
