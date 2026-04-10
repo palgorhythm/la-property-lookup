@@ -1,0 +1,57 @@
+name: Property Lookup
+
+on:
+  workflow_dispatch:
+    inputs:
+      address:
+        description: 'Property address (e.g. 1815 Park Dr)'
+        required: true
+      output_key:
+        description: 'Unique key for the output file (timestamp)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  lookup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-v1
+
+      - name: Install Python dependencies
+        run: pip install playwright
+
+      - name: Install Playwright + system deps (first run)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: playwright install chromium --with-deps
+
+      - name: Install system deps only (cached browsers)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: playwright install-deps chromium
+
+      - name: Run property lookup
+        run: |
+          mkdir -p output
+          python lookup.py "${{ github.event.inputs.address }}" --save "output/${{ github.event.inputs.output_key }}.md"
+
+      - name: Commit and push result
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add output/
+          git diff --staged --quiet || git commit -m "lookup: ${{ github.event.inputs.address }}"
+          git pull --rebase origin main
+          git push
