@@ -18,10 +18,12 @@ from datetime import datetime
 
 
 def parse_address(address: str) -> tuple[str, str]:
-    """Split '1923 Preston Ave' into ('1923', 'Preston')."""
-    parts = address.strip().split()
+    """Split '2051 N Catalina St, Los Angeles, CA 90027' into ('2051', 'Catalina')."""
+    # Strip city, state, zip — everything after the first comma
+    street_line = address.split(",")[0].strip()
+    parts = street_line.split()
     number = parts[0]
-    skip = {"N", "S", "E", "W", "ST", "AVE", "BLVD", "DR", "PL", "CT", "RD", "WAY", "LN", "CIR", "NORTH", "SOUTH", "EAST", "WEST"}
+    skip = {"N", "S", "E", "W", "NE", "NW", "SE", "SW", "ST", "AVE", "BLVD", "DR", "PL", "CT", "RD", "WAY", "LN", "CIR", "NORTH", "SOUTH", "EAST", "WEST"}
     street_parts = [p for p in parts[1:] if p.upper() not in skip]
     street = " ".join(street_parts) if street_parts else parts[1] if len(parts) > 1 else ""
     return number, street
@@ -146,15 +148,15 @@ async def lookup_zimas(page, address: str) -> dict:
     }
 
     try:
-        await page.goto("https://zimas.lacity.org/", timeout=60000, wait_until="domcontentloaded")
-        await page.wait_for_timeout(5000)
+        await page.goto("https://zimas.lacity.org/", timeout=90000, wait_until="domcontentloaded")
+        await page.wait_for_timeout(10000)
         await dismiss_zimas_dialog(page)
 
         number, street = parse_address(address)
         print(f"[ZIMAS] Searching: number='{number}', street='{street}'")
 
         num_input = page.locator("#txtHouseNumber").first
-        await num_input.wait_for(timeout=10000)
+        await num_input.wait_for(timeout=30000)
         await num_input.click(force=True)
         await num_input.fill(number)
 
@@ -267,10 +269,10 @@ async def lookup_ladbs(page, address: str) -> dict:
     try:
         await page.goto(
             "https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr",
-            timeout=60000,
+            timeout=90000,
             wait_until="domcontentloaded",
         )
-        await page.wait_for_timeout(5000)
+        await page.wait_for_timeout(10000)
 
         # Close any popup/overlay that might appear
         try:
@@ -287,18 +289,15 @@ async def lookup_ladbs(page, address: str) -> dict:
             print("  No results. Retrying with 'N' prefix...")
             await page.goto(
                 "https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr",
-                timeout=60000,
+                timeout=90000,
                 wait_until="domcontentloaded",
             )
-            await page.wait_for_timeout(5000)
-            # Modify the address to include N prefix
+            await page.wait_for_timeout(10000)
             number, street = parse_address(address)
-            modified = f"{number} N {street}"
-            await page.wait_for_timeout(3000)
             await page.locator("#StreetNumber").fill(number)
             await page.locator("#StreetNameSingle").fill(f"N {street}")
             await page.locator("#btnSearch").click()
-            await page.wait_for_timeout(8000)
+            await page.wait_for_timeout(10000)
 
         # Close the All Services overlay that covers the results
         try:
