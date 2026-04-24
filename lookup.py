@@ -45,31 +45,43 @@ def parse_tab_separated(text: str) -> dict:
 
 
 async def dismiss_zimas_dialog(page):
-    """ZIMAS shows a jQuery UI terms dialog on load."""
-    # Try JS approach first — most reliable
+    """Accept ZIMAS terms and conditions screen (new Angular app) or old jQuery dialog."""
+    # New ZIMAS: full-page terms acceptance with a checkbox + continue button
+    try:
+        checkbox = page.locator("#checkSaveAcceptTerms").first
+        if await checkbox.is_visible(timeout=5000):
+            await checkbox.click(force=True)
+            await page.wait_for_timeout(500)
+            # Click the Continue / Accept button
+            for sel in [
+                "button:has-text('Continue')", "button:has-text('Accept')",
+                "button:has-text('Agree')", "input[type='submit']",
+                "button[type='submit']", ".btn-primary", "calcite-button",
+            ]:
+                try:
+                    btn = page.locator(sel).first
+                    if await btn.is_visible(timeout=2000):
+                        await btn.click(force=True)
+                        await page.wait_for_timeout(3000)
+                        return
+                except:
+                    continue
+            # If no button found, try pressing Enter
+            await page.keyboard.press("Enter")
+            await page.wait_for_timeout(3000)
+            return
+    except:
+        pass
+
+    # Old ZIMAS: jQuery UI dialog — hide it via JS
     try:
         await page.evaluate("""() => {
             document.querySelectorAll('.ui-dialog').forEach(d => d.style.display = 'none');
             document.querySelectorAll('.ui-widget-overlay').forEach(d => d.style.display = 'none');
-            // Also try closing via jQuery if available
             try { $('.ui-dialog-content').dialog('close'); } catch(e) {}
         }""")
         await page.wait_for_timeout(500)
         return
-    except:
-        pass
-    # Fallback: click close button
-    for selector in ["a:has-text('close')", ".ui-dialog-titlebar-close", "span:has-text('close')"]:
-        try:
-            btn = page.locator(selector).first
-            if await btn.is_visible(timeout=2000):
-                await btn.click(force=True)
-                await page.wait_for_timeout(500)
-                return
-        except:
-            continue
-    try:
-        await page.keyboard.press("Escape")
     except:
         pass
 
