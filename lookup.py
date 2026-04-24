@@ -249,6 +249,13 @@ async def lookup_zimas(page, address: str) -> dict:
     except Exception as e:
         result["error"] = str(e)
         print(f"[ZIMAS] Error: {e}")
+        try:
+            await page.screenshot(path="screenshot_zimas_error.png", full_page=False, timeout=10000)
+            # Also dump visible text so we can see what loaded
+            visible = await page.inner_text("body")
+            print(f"[ZIMAS] Page text at error ({len(visible)} chars): {visible[:500]}")
+        except:
+            pass
 
     return result
 
