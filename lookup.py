@@ -30,17 +30,37 @@ def parse_address(address: str) -> tuple[str, str]:
 
 
 def parse_tab_separated(text: str) -> dict:
-    """Parse ZIMAS-style tab-separated key-value pairs from page text."""
+    """Parse ZIMAS key-value pairs — supports both tab-separated (old) and 'Key: Value' (new)."""
     data = {}
+    skip_keys = {"Search", "Public", "Terms & Conditions", "SEARCH", "REPORTS", "RESOURCES", "HELP"}
+    noise = {"Â", "Skip to Main Content", "ZIMAS", "Toggle Menu", "Zoom in", "Zoom out",
+             "Select", "Identify", "Radius", "Measure", "Basemap"}
+
     for line in text.split("\n"):
         line = line.strip()
+        # Strip unicode garbage (non-breaking spaces rendered as Â)
+        line = line.replace("Â", "").strip()
+        if not line or line in noise:
+            continue
+
+        # Tab-separated (old ZIMAS)
         if "\t" in line:
             parts = line.split("\t", 1)
             if len(parts) == 2:
-                key = parts[0].strip()
-                val = parts[1].strip()
-                if key and val and len(key) > 2 and key not in ("Search", "Public", "Terms & Conditions"):
+                key, val = parts[0].strip(), parts[1].strip()
+                if key and val and len(key) > 2 and key not in skip_keys:
                     data[key] = val
+            continue
+
+        # Colon-separated (new ZIMAS Angular app)
+        if ":" in line:
+            idx = line.index(":")
+            key = line[:idx].strip()
+            val = line[idx + 1:].strip()
+            if (key and val and 3 <= len(key) <= 80 and key not in skip_keys
+                    and not key.startswith("http") and len(val) < 300):
+                data[key] = val
+
     return data
 
 
@@ -244,35 +264,43 @@ async def lookup_zimas(page, address: str) -> dict:
             except:
                 continue
 
-        # Click through each data tab and collect text
+        # Click through each sidebar section and collect text
+        # New ZIMAS uses full labels; old ZIMAS used shorter ones — try both
         tabs_to_click = [
+            "Address/Legal Information",
+            "Jurisdictional Information",
+            "Permitting and Zoning Compliance Information",
+            "Planning and Zoning Information",
+            "Assessor Information",
+            "Case Numbers",
+            "Additional Information",
+            "Environmental",
+            "Seismic Hazards",
+            "Housing",
+            "Public Safety",
+            # Old ZIMAS short names as fallback
             "Address/Legal",
             "Jurisdictional",
             "Permitting and Zoning Compliance",
             "Planning and Zoning",
             "Assessor",
-            "Case Numbers",
-            "Additional",
-            "Environmental",
-            "Seismic Hazards",
-            "Housing",
-            "Public Safety",
         ]
 
-        all_sections = {}
+        clicked = set()
         for tab_name in tabs_to_click:
+            short = tab_name.replace(" Information", "")
+            if short in clicked:
+                continue
             try:
-                # ZIMAS uses a sidebar with collapsible sections
                 tab = page.locator(f"text='{tab_name}'").first
                 if await tab.is_visible(timeout=2000):
                     await tab.click(force=True)
-                    await page.wait_for_timeout(2500)
-                    # Get the content area text
-                    content = await page.inner_text("#infoContent, #resultContent, .info-content, body")
+                    await page.wait_for_timeout(4000)
+                    content = await page.inner_text("body")
                     parsed = parse_tab_separated(content)
                     if parsed:
-                        all_sections[tab_name] = parsed
                         result["data"].update(parsed)
+                    clicked.add(short)
             except:
                 pass
 
