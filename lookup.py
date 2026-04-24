@@ -332,18 +332,6 @@ async def lookup_zimas(page, address: str) -> dict:
     except Exception as e:
         result["error"] = str(e)
         print(f"[ZIMAS] Error: {e}")
-        try:
-            await page.screenshot(path="screenshot_zimas_error.png", full_page=False, timeout=10000)
-            visible = await page.inner_text("body")
-            print(f"[ZIMAS] Page text at error ({len(visible)} chars): {visible[:800]}")
-            # Also log all visible inputs
-            inputs = await page.evaluate("""() => {
-                return Array.from(document.querySelectorAll('input,calcite-input,[role="searchbox"]'))
-                    .map(el => el.tagName + '#' + el.id + ' placeholder=' + (el.placeholder||'') + ' visible=' + (el.offsetParent !== null))
-            }""")
-            print(f"[ZIMAS] Inputs on page: {inputs}")
-        except:
-            pass
 
     return result
 

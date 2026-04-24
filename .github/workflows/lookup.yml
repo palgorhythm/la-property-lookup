@@ -45,15 +45,7 @@ jobs:
       - name: Run property lookup
         run: |
           mkdir -p output
-          python lookup.py "${{ github.event.inputs.address }}" --save "output/${{ github.event.inputs.output_key }}.md" --screenshots
-
-      - name: Upload screenshots
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots
-          path: screenshot_*.png
-          if-no-files-found: ignore
+          python lookup.py "${{ github.event.inputs.address }}" --save "output/${{ github.event.inputs.output_key }}.md"
 
       - name: Commit and push result
         run: |
