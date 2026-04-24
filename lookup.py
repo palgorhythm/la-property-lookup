@@ -148,41 +148,84 @@ async def lookup_zimas(page, address: str) -> dict:
     }
 
     try:
+        # Block render-blocking third-party scripts that hang the page load on CI
+        await page.route("**/*", lambda route: route.abort()
+            if any(h in route.request.url for h in [
+                "navbar.lacity.gov",
+                "go-mpulse.net",
+                "akamaihd.net",
+                "googletagmanager.com",
+                "google-analytics.com",
+            ])
+            else route.continue_())
+
         await page.goto("https://zimas.lacity.org/", timeout=90000, wait_until="domcontentloaded")
-        await page.wait_for_timeout(10000)
+        await page.wait_for_timeout(15000)
         await dismiss_zimas_dialog(page)
 
         number, street = parse_address(address)
-        print(f"[ZIMAS] Searching: number='{number}', street='{street}'")
+        # Full street line (number + street, no city/state) for single-field searches
+        street_line = f"{number} {' '.join(address.split(',')[0].split()[1:])}"
+        print(f"[ZIMAS] Searching: number='{number}', street='{street}', full='{street_line}'")
 
-        num_input = page.locator("#txtHouseNumber").first
-        await num_input.wait_for(timeout=30000)
-        await num_input.click(force=True)
-        await num_input.fill(number)
-
-        street_input = page.locator("#txtStreetName").first
-        await street_input.click(force=True)
-        await street_input.fill(street)
-
-        # Submit
-        for sel in ["#btnSearch", "#imgSearch", "input[type='submit']", "input[type='image']"]:
+        # Wait for any search input to appear — new ZIMAS is Angular/Esri and may use different selectors
+        search_selectors = [
+            "#txtHouseNumber",          # old ZIMAS
+            ".esri-search__input",      # Esri search widget
+            "input[placeholder*='ddress']",
+            "input[placeholder*='earch']",
+            "calcite-input input",      # Calcite design system
+            "input[type='search']",
+            "input[type='text']",
+        ]
+        found_input = None
+        for sel in search_selectors:
             try:
-                btn = page.locator(sel).first
-                if await btn.is_visible(timeout=2000):
-                    await btn.click(force=True)
-                    break
+                loc = page.locator(sel).first
+                await loc.wait_for(state="visible", timeout=5000)
+                found_input = loc
+                found_selector = sel
+                print(f"[ZIMAS] Found input: {sel}")
+                break
             except:
                 continue
+
+        if found_input is None:
+            raise Exception("Could not find any search input on ZIMAS page after page load")
+
+        # Old ZIMAS: two separate fields (house number + street name)
+        if found_selector == "#txtHouseNumber":
+            await found_input.click(force=True)
+            await found_input.fill(number)
+            street_input = page.locator("#txtStreetName").first
+            await street_input.click(force=True)
+            await street_input.fill(street)
+            for sel in ["#btnSearch", "#imgSearch", "input[type='submit']", "input[type='image']"]:
+                try:
+                    btn = page.locator(sel).first
+                    if await btn.is_visible(timeout=2000):
+                        await btn.click(force=True)
+                        break
+                except:
+                    continue
+            else:
+                await page.keyboard.press("Enter")
         else:
+            # New ZIMAS / Esri search: single field, type full address and pick suggestion
+            await found_input.click(force=True)
+            await found_input.fill(street_line)
+            await page.wait_for_timeout(2000)
+            # Press Enter or pick the first suggestion
             await page.keyboard.press("Enter")
 
         await page.wait_for_timeout(8000)
 
         # Click through suggestion if needed
-        for sel in [".suggestion", ".esri-search__suggestion", "li[role='option']"]:
+        for sel in [".suggestion", ".esri-search__suggestion", "li[role='option']",
+                    "[class*='suggestion']", "calcite-list-item"]:
             try:
                 item = page.locator(sel).first
-                await item.wait_for(timeout=2000)
+                await item.wait_for(timeout=3000)
                 await item.click()
                 await page.wait_for_timeout(5000)
                 break
@@ -251,9 +294,14 @@ async def lookup_zimas(page, address: str) -> dict:
         print(f"[ZIMAS] Error: {e}")
         try:
             await page.screenshot(path="screenshot_zimas_error.png", full_page=False, timeout=10000)
-            # Also dump visible text so we can see what loaded
             visible = await page.inner_text("body")
-            print(f"[ZIMAS] Page text at error ({len(visible)} chars): {visible[:500]}")
+            print(f"[ZIMAS] Page text at error ({len(visible)} chars): {visible[:800]}")
+            # Also log all visible inputs
+            inputs = await page.evaluate("""() => {
+                return Array.from(document.querySelectorAll('input,calcite-input,[role="searchbox"]'))
+                    .map(el => el.tagName + '#' + el.id + ' placeholder=' + (el.placeholder||'') + ' visible=' + (el.offsetParent !== null))
+            }""")
+            print(f"[ZIMAS] Inputs on page: {inputs}")
         except:
             pass
 
