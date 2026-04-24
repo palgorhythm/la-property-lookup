@@ -8,45 +8,27 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; color: #222; }
-    header { background: #1a1a2e; color: white; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    header { background: #1a1a2e; color: white; padding: 1.25rem 1.5rem; }
     header h1 { font-size: 1.2rem; font-weight: 600; }
-    .gear-btn { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 1.2rem; cursor: pointer; padding: 0.25rem; }
-    .gear-btn:hover { color: white; }
     .container { max-width: 860px; margin: 0 auto; padding: 1.5rem; }
 
-    /* PAT setup */
-    .pat-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem; }
-    .pat-card h2 { font-size: 0.95rem; margin-bottom: 0.5rem; }
-    .pat-card p { font-size: 0.82rem; color: #666; margin-bottom: 0.75rem; line-height: 1.5; }
-    .pat-card p a { color: #1a1a2e; }
-    .pat-row { display: flex; gap: 0.5rem; }
-    .pat-row input { flex: 1; padding: 0.55rem 0.75rem; font-size: 0.9rem; border: 1px solid #ccc; border-radius: 6px; font-family: monospace; }
-    .btn-primary { padding: 0.55rem 1rem; background: #1a1a2e; color: white; border: none; border-radius: 6px; font-size: 0.875rem; cursor: pointer; white-space: nowrap; }
-    .btn-primary:hover { background: #2d2d4e; }
-    .pat-status { font-size: 0.78rem; margin-top: 0.5rem; color: #555; }
-    .pat-status.ok { color: #155724; }
-
-    /* Search */
     .search-bar { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; }
     .search-bar input { flex: 1; padding: 0.65rem 1rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 6px; }
     .search-bar button { padding: 0.65rem 1.2rem; background: #1a1a2e; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
     .search-bar button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* Progress */
     #progress { display: none; background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; }
     .progress-label { font-size: 0.875rem; color: #555; margin-bottom: 0.6rem; }
     .progress-track { background: #eee; border-radius: 4px; height: 6px; overflow: hidden; margin-bottom: 0.6rem; }
     .progress-fill { background: #1a1a2e; height: 100%; width: 0%; transition: width 0.5s ease; border-radius: 4px; }
     .progress-detail { font-size: 0.78rem; color: #888; }
 
-    /* Results */
     #results { display: none; }
     .actions { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
     .btn-secondary { padding: 0.5rem 1rem; background: white; border: 1px solid #ccc; border-radius: 6px; font-size: 0.875rem; cursor: pointer; }
     .btn-secondary:hover { background: #f5f5f5; }
     .result-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.25rem 1.5rem; }
 
-    /* Markdown rendering */
     .md h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
     .md h2 { font-size: 1.05rem; margin-top: 1.5rem; margin-bottom: 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid #e0e0e0; }
     .md h3 { font-size: 0.95rem; margin-top: 1rem; margin-bottom: 0.35rem; color: #444; }
@@ -68,41 +50,21 @@
 <body>
   <header>
     <h1>LA Property Lookup</h1>
-    <button class="gear-btn" onclick="toggleSettings()" title="Settings">⚙</button>
   </header>
 
   <div class="container">
 
-    <!-- PAT setup card -->
-    <div class="pat-card" id="patCard" style="display:none">
-      <h2>GitHub Token Required</h2>
-      <p>
-        Lookups run via GitHub Actions (full ZIMAS + LADBS scrape, all permits, all CE cases).
-        Create a <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=la-property-lookup" target="_blank">Personal Access Token</a>
-        with <strong>repo</strong> and <strong>workflow</strong> scopes, then paste it below.
-        It's stored only in your browser's localStorage.
-      </p>
-      <div class="pat-row">
-        <input type="password" id="patInput" placeholder="ghp_..." autocomplete="off" />
-        <button class="btn-primary" onclick="savePAT()">Save</button>
-      </div>
-      <div class="pat-status" id="patStatus"></div>
-    </div>
-
-    <!-- Search -->
     <div class="search-bar">
       <input type="text" id="addressInput" placeholder="1815 Park Dr" />
       <button id="lookupBtn" onclick="runLookup()">Look Up</button>
     </div>
 
-    <!-- Progress -->
     <div id="progress">
       <div class="progress-label" id="progressLabel">Starting…</div>
       <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
       <div class="progress-detail" id="progressDetail"></div>
     </div>
 
-    <!-- Results -->
     <div id="results">
       <div class="actions">
         <button class="btn-secondary" onclick="copyMarkdown()">Copy as Markdown</button>
@@ -116,77 +78,47 @@
   </div>
 
   <script>
-    const REPO = 'palgorhythm/la-property-lookup';
-    const WORKFLOW = 'lookup.yml';
+    const WORKER_URL = 'https://la-property-lookup.lapropertylookup.workers.dev';
 
-    // ── PAT management ───────────────────────────────────────────────────────
-    function getPAT() { return localStorage.getItem('la_lookup_pat') || ''; }
-
-    function savePAT() {
-      const val = document.getElementById('patInput').value.trim();
-      if (!val) return;
-      localStorage.setItem('la_lookup_pat', val);
-      document.getElementById('patInput').value = '';
-      showPATStatus();
-      document.getElementById('patCard').style.display = 'none';
-    }
-
-    function showPATStatus() {
-      const el = document.getElementById('patStatus');
-      if (getPAT()) {
-        el.textContent = '✓ Token saved';
-        el.className = 'pat-status ok';
-      }
-    }
-
-    function toggleSettings() {
-      const card = document.getElementById('patCard');
-      card.style.display = card.style.display === 'none' ? 'block' : 'none';
-      showPATStatus();
-    }
-
-    // Show PAT card on first load if no token saved
     window.addEventListener('load', () => {
-      if (!getPAT()) {
-        document.getElementById('patCard').style.display = 'block';
-      }
       document.getElementById('addressInput').addEventListener('keydown', e => {
         if (e.key === 'Enter') runLookup();
       });
     });
 
-    // ── Progress ─────────────────────────────────────────────────────────────
     function setProgress(pct, label, detail) {
       document.getElementById('progressFill').style.width = pct + '%';
       document.getElementById('progressLabel').textContent = label;
       document.getElementById('progressDetail').textContent = detail || '';
     }
 
-    // ── Main lookup ──────────────────────────────────────────────────────────
     let rawMarkdown = '';
 
     async function runLookup() {
       const address = document.getElementById('addressInput').value.trim();
       if (!address) return;
 
-      const pat = getPAT();
-      if (!pat) {
-        document.getElementById('patCard').style.display = 'block';
-        return;
-      }
-
       document.getElementById('lookupBtn').disabled = true;
       document.getElementById('results').style.display = 'none';
       document.getElementById('progress').style.display = 'block';
-      setProgress(5, 'Triggering GitHub Actions workflow…', '');
-
-      const outputKey = Date.now().toString();
+      setProgress(5, 'Triggering lookup…', '');
 
       try {
-        await triggerWorkflow(address, outputKey, pat);
-        setProgress(10, 'Workflow started — installing Playwright & running scrape…', 'Usually takes 2–4 min. First run may take longer (no cache).');
+        const res = await fetch(`${WORKER_URL}/lookup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address }),
+        });
 
-        const markdown = await pollForResult(outputKey, pat);
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || `Server error (HTTP ${res.status})`);
+        }
+
+        const { job_id } = await res.json();
+        setProgress(10, 'Workflow started — scraping ZIMAS & LADBS…', 'Usually takes 2–4 min.');
+
+        const markdown = await pollForResult(job_id);
         rawMarkdown = markdown;
 
         document.getElementById('progress').style.display = 'none';
@@ -203,68 +135,40 @@
       }
     }
 
-    async function triggerWorkflow(address, outputKey, pat) {
-      const res = await fetch(
-        `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${pat}`,
-            'Accept': 'application/vnd.github+json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ref: 'main',
-            inputs: { address, output_key: outputKey },
-          }),
-        }
-      );
-      if (res.status === 401) throw new Error('GitHub token is invalid or expired. Click ⚙ to update it.');
-      if (res.status === 403) throw new Error('GitHub token lacks repo/workflow permissions. Click ⚙ to update it.');
-      if (!res.ok) throw new Error(`Failed to trigger workflow (HTTP ${res.status}). Check your token has repo + workflow scopes.`);
-    }
-
-    async function pollForResult(outputKey, pat, timeoutMs = 600000) {
+    async function pollForResult(jobId, timeoutMs = 600000) {
       const start = Date.now();
-      const initialWait = 45000; // 45s before first check
-
-      await sleep(initialWait);
+      await sleep(45000);
       setProgress(25, 'Scraping ZIMAS and LADBS…', elapsed(start));
 
-      const pollInterval = 15000;
-      let attempt = 0;
       const milestones = [
         { pct: 40, label: 'Expanding permit sections…' },
         { pct: 55, label: 'Collecting code enforcement cases…' },
         { pct: 70, label: 'Almost done…' },
         { pct: 85, label: 'Finishing up…' },
       ];
+      let attempt = 0;
 
       while (Date.now() - start < timeoutMs) {
         try {
-          const res = await fetch(
-            `https://api.github.com/repos/${REPO}/contents/output/${outputKey}.md`,
-            {
-              headers: {
-                'Authorization': `Bearer ${pat}`,
-                'Accept': 'application/vnd.github+json',
-              },
-            }
-          );
+          const res = await fetch(`${WORKER_URL}/result/${jobId}`);
           if (res.ok) {
-            const data = await res.json();
             setProgress(100, 'Done!', '');
-            return atob(data.content.replace(/\n/g, ''));
+            return await res.text();
           }
-        } catch (_) {}
+          if (res.status !== 202) {
+            const data = await res.json().catch(() => ({}));
+            throw new Error(data.error || `Unexpected error (HTTP ${res.status})`);
+          }
+        } catch (e) {
+          if (e.message && !e.message.startsWith('Unexpected')) throw e;
+        }
 
-        attempt++;
-        const m = milestones[Math.min(attempt - 1, milestones.length - 1)];
+        const m = milestones[Math.min(attempt++, milestones.length - 1)];
         setProgress(m.pct, m.label, elapsed(start));
-        await sleep(pollInterval);
+        await sleep(15000);
       }
 
-      throw new Error('Lookup timed out after 10 minutes. The workflow may still be running — check GitHub Actions.');
+      throw new Error('Lookup timed out after 10 minutes. The workflow may still be running.');
     }
 
     function elapsed(start) {
@@ -274,7 +178,6 @@
 
     function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-    // ── Copy markdown ─────────────────────────────────────────────────────────
     function copyMarkdown() {
       if (!rawMarkdown) return;
       navigator.clipboard.writeText(rawMarkdown).then(() => {
