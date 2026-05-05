@@ -151,7 +151,7 @@
       while (Date.now() - start < timeoutMs) {
         try {
           const res = await fetch(`${WORKER_URL}/result/${jobId}`);
-          if (res.ok) {
+          if (res.status === 200) {
             setProgress(100, 'Done!', '');
             return await res.text();
           }
