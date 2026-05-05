@@ -17,16 +17,166 @@ import re
 from datetime import datetime
 
 
+DIRECTIONALS = {"N", "S", "E", "W", "NE", "NW", "SE", "SW",
+                "NORTH", "SOUTH", "EAST", "WEST"}
+
+# Bidirectional map between abbreviated and full street-type forms.
+# Used to try both forms against LA city sites that index inconsistently.
+SUFFIX_ALTERNATES = {
+    "ST": "STREET", "STREET": "ST",
+    "AVE": "AVENUE", "AVENUE": "AVE",
+    "BLVD": "BOULEVARD", "BOULEVARD": "BLVD",
+    "DR": "DRIVE", "DRIVE": "DR",
+    "PL": "PLACE", "PLACE": "PL",
+    "CT": "COURT", "COURT": "CT",
+    "RD": "ROAD", "ROAD": "RD",
+    "LN": "LANE", "LANE": "LN",
+    "CIR": "CIRCLE", "CIRCLE": "CIR",
+    "TER": "TERRACE", "TERRACE": "TER",
+    "PKWY": "PARKWAY", "PARKWAY": "PKWY",
+    "HWY": "HIGHWAY", "HIGHWAY": "HWY",
+    "TRL": "TRAIL", "TRAIL": "TRL",
+    "PT": "POINT", "POINT": "PT",
+    "SQ": "SQUARE", "SQUARE": "SQ",
+    "GLN": "GLEN", "GLEN": "GLN",
+    "XING": "CROSSING", "CROSSING": "XING",
+    "ALY": "ALLEY", "ALLEY": "ALY",
+    "BND": "BEND", "BEND": "BND",
+}
+STREET_TYPES = set(SUFFIX_ALTERNATES.keys()) | {
+    "WAY", "ROW", "MEWS", "PASS", "RUN", "PROMENADE",
+}
+
+
 def parse_address(address: str) -> tuple[str, str]:
-    """Split '2051 N Catalina St, Los Angeles, CA 90027' into ('2051', 'Catalina')."""
-    # Strip city, state, zip — everything after the first comma
-    street_line = address.split(",")[0].strip()
+    """Split '2051 N Catalina St, Los Angeles, CA 90027' into ('2051', 'Catalina').
+
+    Strips directional prefix and street suffix to match LADBS's index, which
+    keys on bare street name (e.g. 'Edgewater', not 'Edgewater Ter')."""
+    parts = parse_address_full(address)
+    return parts["number"], parts["core"]
+
+
+def parse_address_full(address: str) -> dict:
+    """Parse address into structured components for site-specific formatting."""
+    parts_csv = address.split(",", 1)
+    street_line = parts_csv[0].strip()
+    rest = parts_csv[1].strip() if len(parts_csv) > 1 else ""
+
     parts = street_line.split()
-    number = parts[0]
-    skip = {"N", "S", "E", "W", "NE", "NW", "SE", "SW", "ST", "AVE", "BLVD", "DR", "PL", "CT", "RD", "WAY", "LN", "CIR", "NORTH", "SOUTH", "EAST", "WEST"}
-    street_parts = [p for p in parts[1:] if p.upper() not in skip]
-    street = " ".join(street_parts) if street_parts else parts[1] if len(parts) > 1 else ""
-    return number, street
+    number = parts[0] if parts else ""
+    name_tokens = parts[1:]
+
+    # Leading directional (N, S, E, W…)
+    directional = None
+    if name_tokens and name_tokens[0].upper() in DIRECTIONALS:
+        directional = name_tokens[0]
+        name_tokens = name_tokens[1:]
+
+    # Trailing street type (St, Ave, Ter…)
+    suffix = None
+    if name_tokens and name_tokens[-1].upper() in STREET_TYPES:
+        suffix = name_tokens[-1]
+        name_tokens = name_tokens[:-1]
+
+    core = " ".join(name_tokens)
+    suffix_alt = None
+    if suffix:
+        alt = SUFFIX_ALTERNATES.get(suffix.upper())
+        if alt:
+            # Match the case style of the input suffix
+            if suffix.isupper():
+                suffix_alt = alt.upper()
+            elif suffix[:1].isupper():
+                suffix_alt = alt.title()
+            else:
+                suffix_alt = alt.lower()
+
+    return {
+        "number": number,
+        "directional": directional,
+        "core": core,
+        "suffix": suffix,
+        "suffix_alt": suffix_alt,
+        "rest": rest,
+        "original": address,
+    }
+
+
+def ladbs_search_variants(address: str) -> list[tuple[str, str]]:
+    """Ordered list of (number, street_query) variants to try on LADBS.
+
+    LADBS's address search is finicky — it indexes some streets by bare name
+    and others with suffix; some require an 'N' prefix even when none was given.
+    Each variant is tried until one returns results."""
+    p = parse_address_full(address)
+    n, core, suffix, suffix_alt, direc = (
+        p["number"], p["core"], p["suffix"], p["suffix_alt"], p["directional"],
+    )
+    variants: list[tuple[str, str]] = []
+    seen: set[tuple[str, str]] = set()
+
+    def add(num: str, street: str) -> None:
+        if not num or not street:
+            return
+        key = (num.upper(), street.upper())
+        if key not in seen:
+            seen.add(key)
+            variants.append((num, street))
+
+    # 1. Bare street name (no directional, no suffix) — most flexible match
+    add(n, core)
+    # 2. Core + alternate suffix form (Ter ↔ Terrace, Ave ↔ Avenue)
+    if suffix_alt:
+        add(n, f"{core} {suffix_alt}")
+    # 3. Core + original suffix
+    if suffix:
+        add(n, f"{core} {suffix}")
+    # 4. With "N" prefix (common LADBS quirk for north-side addresses)
+    if not direc:
+        add(n, f"N {core}")
+    # 5. Original directional + core
+    if direc:
+        add(n, f"{direc} {core}")
+
+    return variants
+
+
+def zimas_search_variants(address: str) -> list[str]:
+    """Ordered list of full-address strings to try on ZIMAS's Esri geocoder."""
+    p = parse_address_full(address)
+    n, core, suffix, suffix_alt, direc, rest = (
+        p["number"], p["core"], p["suffix"], p["suffix_alt"],
+        p["directional"], p["rest"],
+    )
+    direc_part = f"{direc} " if direc else ""
+    rest_part = f", {rest}" if rest else ""
+
+    variants: list[str] = []
+    seen: set[str] = set()
+
+    def add(s: str) -> None:
+        s = s.strip()
+        if s and s.upper() not in seen:
+            seen.add(s.upper())
+            variants.append(s)
+
+    # 1. Original input — best for Esri if it has city/state/zip
+    add(p["original"])
+    # 2. With alternate suffix form + city/zip
+    if suffix_alt:
+        add(f"{n} {direc_part}{core} {suffix_alt}{rest_part}")
+    # 3. Just street line as parsed (no city/zip)
+    if suffix:
+        add(f"{n} {direc_part}{core} {suffix}")
+    # 4. Alt suffix, no city/zip
+    if suffix_alt:
+        add(f"{n} {direc_part}{core} {suffix_alt}")
+    # 5. Bare core (no suffix)
+    if core:
+        add(f"{n} {direc_part}{core}")
+
+    return variants
 
 
 def parse_tab_separated(text: str) -> dict:
@@ -106,9 +256,8 @@ async def dismiss_zimas_dialog(page):
         pass
 
 
-async def fill_ladbs_search(page, address: str):
+async def fill_ladbs_search(page, number: str, street: str):
     """Fill the LADBS split address fields and submit via JS to bypass overlays."""
-    number, street = parse_address(address)
     print(f"  Searching LADBS: number='{number}', street='{street}'")
 
     await page.wait_for_timeout(3000)
@@ -191,78 +340,99 @@ async def lookup_zimas(page, address: str) -> dict:
             ])
             else route.continue_())
 
-        await page.goto("https://zimas.lacity.org/", timeout=90000, wait_until="domcontentloaded")
-        await page.wait_for_timeout(15000)
-        await dismiss_zimas_dialog(page)
+        async def _open_zimas():
+            await page.goto("https://zimas.lacity.org/", timeout=90000, wait_until="domcontentloaded")
+            await page.wait_for_timeout(15000)
+            await dismiss_zimas_dialog(page)
 
-        number, street = parse_address(address)
-        # Full street line (number + street, no city/state) for single-field searches
-        street_line = f"{number} {' '.join(address.split(',')[0].split()[1:])}"
-        print(f"[ZIMAS] Searching: number='{number}', street='{street}', full='{street_line}'")
+        async def _find_search_input():
+            search_selectors = [
+                "#txtHouseNumber",          # old ZIMAS
+                ".esri-search__input",      # Esri search widget
+                "input[placeholder*='ddress']",
+                "input[placeholder*='earch']",
+                "calcite-input input",      # Calcite design system
+                "input[type='search']",
+                "input[type='text']",
+            ]
+            for sel in search_selectors:
+                try:
+                    loc = page.locator(sel).first
+                    await loc.wait_for(state="visible", timeout=5000)
+                    return loc, sel
+                except:
+                    continue
+            return None, None
 
-        # Wait for any search input to appear — new ZIMAS is Angular/Esri and may use different selectors
-        search_selectors = [
-            "#txtHouseNumber",          # old ZIMAS
-            ".esri-search__input",      # Esri search widget
-            "input[placeholder*='ddress']",
-            "input[placeholder*='earch']",
-            "calcite-input input",      # Calcite design system
-            "input[type='search']",
-            "input[type='text']",
-        ]
-        found_input = None
-        for sel in search_selectors:
-            try:
-                loc = page.locator(sel).first
-                await loc.wait_for(state="visible", timeout=5000)
-                found_input = loc
-                found_selector = sel
-                print(f"[ZIMAS] Found input: {sel}")
-                break
-            except:
-                continue
+        async def _submit_query(query: str, found_input, found_selector: str):
+            number_p, street_p = parse_address(query)
+            if found_selector == "#txtHouseNumber":
+                # Old ZIMAS: split fields
+                await found_input.click(force=True)
+                await found_input.fill(number_p)
+                street_input = page.locator("#txtStreetName").first
+                await street_input.click(force=True)
+                await street_input.fill(street_p)
+                for sel in ["#btnSearch", "#imgSearch", "input[type='submit']", "input[type='image']"]:
+                    try:
+                        btn = page.locator(sel).first
+                        if await btn.is_visible(timeout=2000):
+                            await btn.click(force=True)
+                            break
+                    except:
+                        continue
+                else:
+                    await page.keyboard.press("Enter")
+            else:
+                # New ZIMAS Esri: single search field; geocoder works best with the full
+                # address-as-given, but we'll cycle through variants if it doesn't resolve.
+                await found_input.click(force=True)
+                await found_input.fill("")
+                await found_input.fill(query)
+                await page.wait_for_timeout(2000)
+                await page.keyboard.press("Enter")
+            await page.wait_for_timeout(8000)
 
+            # Click suggestion if shown
+            for sel in [".suggestion", ".esri-search__suggestion", "li[role='option']",
+                        "[class*='suggestion']", "calcite-list-item"]:
+                try:
+                    item = page.locator(sel).first
+                    await item.wait_for(timeout=3000)
+                    await item.click()
+                    await page.wait_for_timeout(5000)
+                    break
+                except:
+                    continue
+
+        await _open_zimas()
+        found_input, found_selector = await _find_search_input()
         if found_input is None:
             raise Exception("Could not find any search input on ZIMAS page after page load")
 
-        # Old ZIMAS: two separate fields (house number + street name)
-        if found_selector == "#txtHouseNumber":
-            await found_input.click(force=True)
-            await found_input.fill(number)
-            street_input = page.locator("#txtStreetName").first
-            await street_input.click(force=True)
-            await street_input.fill(street)
-            for sel in ["#btnSearch", "#imgSearch", "input[type='submit']", "input[type='image']"]:
-                try:
-                    btn = page.locator(sel).first
-                    if await btn.is_visible(timeout=2000):
-                        await btn.click(force=True)
-                        break
-                except:
-                    continue
-            else:
-                await page.keyboard.press("Enter")
-        else:
-            # New ZIMAS / Esri search: single field, type full address and pick suggestion
-            await found_input.click(force=True)
-            await found_input.fill(street_line)
-            await page.wait_for_timeout(2000)
-            # Press Enter or pick the first suggestion
-            await page.keyboard.press("Enter")
-
-        await page.wait_for_timeout(8000)
-
-        # Click through suggestion if needed
-        for sel in [".suggestion", ".esri-search__suggestion", "li[role='option']",
-                    "[class*='suggestion']", "calcite-list-item"]:
-            try:
-                item = page.locator(sel).first
-                await item.wait_for(timeout=3000)
-                await item.click()
-                await page.wait_for_timeout(5000)
-                break
-            except:
+        # ZIMAS's Esri geocoder is forgiving but not perfect — try variants in order
+        # until the parcel info pane populates with assessor data.
+        queries = zimas_search_variants(address)
+        print(f"[ZIMAS] Will try up to {len(queries)} address variants")
+        resolved = False
+        for i, q in enumerate(queries, start=1):
+            print(f"[ZIMAS] attempt {i}/{len(queries)}: {q!r}")
+            if i > 1:
+                await _open_zimas()
+                found_input, found_selector = await _find_search_input()
+                if found_input is None:
+                    break
+            await _submit_query(q, found_input, found_selector)
+            body_text = await page.inner_text("body")
+            if "NO RESULTS" in body_text.upper() or "no results were returned" in body_text.lower():
+                print(f"[ZIMAS] no results for {q!r}, trying next...")
                 continue
+            # Heuristic: parcel resolved when the Assessor section is loadable
+            if any(marker in body_text for marker in ["Assessor Parcel No.", "Year Built", "Zoning:", "APN"]):
+                resolved = True
+                break
+        if not resolved:
+            print("[ZIMAS] no variants resolved; collecting whatever loaded")
 
         # Click through each sidebar section and collect text
         # New ZIMAS uses full labels; old ZIMAS used shorter ones — try both
@@ -350,37 +520,42 @@ async def lookup_ladbs(page, address: str) -> dict:
     }
 
     try:
-        await page.goto(
-            "https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr",
-            timeout=90000,
-            wait_until="domcontentloaded",
-        )
-        await page.wait_for_timeout(10000)
-
-        # Close any popup/overlay that might appear
-        try:
-            await page.evaluate("document.querySelectorAll('.modal, [role=\"dialog\"]').forEach(d => d.style.display = 'none')")
-        except:
-            pass
-
-        await fill_ladbs_search(page, address)
-
-        # Check if search returned results
-        body = await page.inner_text("body")
-        if "No Addresses were found" in body:
-            # LADBS often requires "N" prefix. Try with "N" added to street name
-            print("  No results. Retrying with 'N' prefix...")
+        async def _open_search_page():
             await page.goto(
                 "https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr",
                 timeout=90000,
                 wait_until="domcontentloaded",
             )
             await page.wait_for_timeout(10000)
-            number, street = parse_address(address)
-            await page.locator("#StreetNumber").fill(number)
-            await page.locator("#StreetNameSingle").fill(f"N {street}")
-            await page.locator("#btnSearch").click()
-            await page.wait_for_timeout(10000)
+            try:
+                await page.evaluate(
+                    "document.querySelectorAll('.modal, [role=\"dialog\"]').forEach(d => d.style.display = 'none')"
+                )
+            except:
+                pass
+
+        # LADBS's address index is inconsistent (street-suffix sensitivity, N-prefix
+        # quirks). Try a sequence of address variants until one returns results.
+        variants = ladbs_search_variants(address)
+        body = ""
+        success = False
+        for i, (number, street) in enumerate(variants, start=1):
+            print(f"  LADBS attempt {i}/{len(variants)}")
+            if i > 1:
+                await _open_search_page()
+            else:
+                await _open_search_page()
+            await fill_ladbs_search(page, number, street)
+            body = await page.inner_text("body")
+            if "No Addresses were found" not in body:
+                success = True
+                break
+            print(f"    No results for '{number} {street}', trying next variant...")
+
+        if not success:
+            print(f"  No LADBS results across {len(variants)} address variants")
+            result["error"] = f"No LADBS results across {len(variants)} address variants"
+            return result
 
         # Close the All Services overlay that covers the results
         try:
@@ -628,17 +803,19 @@ def format_markdown(zimas: dict, ladbs: dict) -> str:
             lines.append(sections["permits"][:5000])
             lines.append("```\n")
 
-    # Raw output
+    # Raw output — collapsed by default so the report stays readable
     lines.append("---")
     lines.append("## Raw Output\n")
     for name, result in [("ZIMAS", zimas), ("LADBS", ladbs)]:
-        lines.append(f"### {name} — Raw")
-        lines.append("```")
         raw = result.get("raw_text", "")
         if len(raw) > 15000:
             raw = raw[:15000] + "\n... (truncated)"
+        lines.append("<details>")
+        lines.append(f"<summary>{name} — Raw ({len(raw):,} chars)</summary>\n")
+        lines.append("```")
         lines.append(raw)
-        lines.append("```\n")
+        lines.append("```")
+        lines.append("</details>\n")
 
     return "\n".join(lines)
 
