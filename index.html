@@ -55,7 +55,7 @@
   <div class="container">
 
     <div class="search-bar">
-      <input type="text" id="addressInput" placeholder="1815 Park Dr" />
+      <input type="text" id="addressInput" placeholder="1815 Park Dr, Los Angeles, CA 90026" />
       <button id="lookupBtn" onclick="runLookup()">Look Up</button>
     </div>
 
@@ -135,7 +135,7 @@
       }
     }
 
-    async function pollForResult(jobId, timeoutMs = 600000) {
+    async function pollForResult(jobId, timeoutMs = 900000) {
       const start = Date.now();
       await sleep(45000);
       setProgress(25, 'Scraping ZIMAS and LADBS…', elapsed(start));
